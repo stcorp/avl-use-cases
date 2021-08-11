@@ -250,7 +250,7 @@ The `bin_spatial()` operation requires six input parameters, that defines the ne
 - the longitude offset at which to start the grid
 - the longitude increment (= longitude length of a grid cell)
 
-(Add here figure: grid_demo3.png)
+![bin_spatial grid](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase1/grid.png)
 
 In this example we define a new grid at 0.05 degrees resolution over the area of the volcanic SO2 plume. The latitude and longitude offset in this case is for latitude -10S, and for longitude -70W (red point in the picture). Since the grid resolution is now 0.05 degrees and the latitudes in the new grid extend from -10S to 30N, the number of latitude edge points is 801 (=number of points from -10 to 30 at 0.05 steps). Similarly, since the the longitudes in the grid extend from -70W to -20W, the number of longitude edge points is 1001. Hence, the number edge points is one more than the number of grid cells. This is similar to the way you should provide the `X` and `Y` parameters to the `pcolormesh` function (see [matplotlib_documentation)](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html).
 For a 0.1 degree by 0.1 degree global grid we would need 1800 by 3600 grid cells which equals 1801 by 3601 grid edge points.
