@@ -1,6 +1,5 @@
 name: avl
 channels:
-  - stcorp-forge
   - conda-forge
 dependencies:
   - cartopy
