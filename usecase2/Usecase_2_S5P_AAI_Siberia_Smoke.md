@@ -1,0 +1,327 @@
+![VIIRS_RGB_smoke.png](attachment:VIIRS_RGB_smoke.png)
+
+# Creating gridded Level 3 data with HARP from multiple TROPOMI Level 2 UVAI files
+ 
+This use case demonstrates **how to create a gridded level 3 netcdf file from multiple level 2 TROPOMI UV Aerosol Index (UVAI) files**. The case is demonstrated with an extensive smoke plume from wildfires in Siberia, Russia, on 6th of August 2021. The wildfire smoke covered an extensive area in the Northern hemisphere, and therefore the best view on the plume is obtained by **gridding TROPOMI Level 2 data from all the orbits available on that day**, a total of 14 files **into one level 3 file**. This tutorial shows  
+
+-  how to read and import TROPOMI Level 2 UVAI with HARP
+-  how to grid multiple orbits from one day into a common grid, and save the merged data as netcdf file
+
+## Table of contents
+
+1. [TROPOMI Level 2 UVAI product](#paragraph1)
+2. [Python packages for the notebook](#paragraph2)
+3. [Downloading TROPOMI UVAI files (optional)](#paragraph3)
+4. [Viewing the content of the UVAI file (optional)](#paragraph4)
+5. [Regridding level 2 data into level 3 grid](#paragraph5)
+    1. [Step 1: Operations in HARP import](#subparagraph1)
+    2. [Step 2: Create the merged product: reduce_operations](#subparagraph2)
+    3. [Step 3: Apply HARP import command to multiple input files](#subparagraph3) 
+6. [Plotting gridded level 3 data on a map](#paragraph6)  
+7. [Save gridded data as netcdf](#paragraph7)  
+8. [References to HARP documentation](#harp_references)
+
+
+## 1. TROPOMI Level 2 UVAI product <a name="paragraph1"></a>
+The first paragraph text
+UVAI (also called as Absorbing Aerosol Index AAI or Aerosol Index AI)) is a unitless parameter that is defined based on wavelength dependent changes in Rayleigh scattering in the UV spectral range. Positive values of UVAI indicate the presence of an elevated absorbing aerosol plume, like smoke from biomass burning aerosols, desert dust or volcanic ash. In this tutorial the positive UVAI values that we are interested in, are referred as **Absorbing Aerosol Index (AAI)**. 
+
+For more information on TROPOMI UVAI product can be found here:
+- [UVAI Algorithm Theoretical Basis Document](https://sentinels.copernicus.eu/documents/247904/2476257/Sentinel-5P-TROPOMI-ATBD-UV-Aerosol-Index)
+- [UVAI Product User Manual](https://sentinels.copernicus.eu/documents/247904/2474726/Sentinel-5P-Level-2-Product-User-Manual-Aerosol-Index-product)
+
+## 2. Python packages for the notebook <a name="paragraph2"></a>
+
+In addition to HARP, this notebook uses several other Python packages that needs to be installed before executing the notebook:
+
+- **harp**: for reading and handling of TROPOMI data
+- **numpy**: for working with arrays 
+- **matplotlib**: for visualizing data
+- **cartopy**: for geospatial data processing, e.g. for plotting maps
+- **cmcrameri**: for universally readable scientific colormaps
+
+In case you want to download the TROPOMI files automatically from the Sentinel-5P Pre-Operations Data Hub, you will need also:
+    
+- **sentinelsat**: for searching, downloading and retrieving the metadata of Sentinel satellite images from the Copernicus Open Access Hub.
+
+Note that if you have installed HARP in some specific python environment, check that you have activated the environment before running the scripts. 
+
+**The needed Python packages are imported as follows:**
+
+
+```python
+import harp
+import numpy as np
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+from cmcrameri import cm
+import sentinelsat
+```
+
+## 3. Downloading TROPOMI UVAI files (optional) <a name="paragraph3"></a>
+
+The TROPOMI UVAI data used in this notebook is obtained from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home). For Sentinel-5P each level 2 file contains information from one orbit. There are approximately 14 orbits per day.  This notebook uses TROPOMI UVAI data from 6th August 2021 including the following files: 
+
+<i> S5P_OFFL_L2__AER_AI_20210806T003208_20210806T021338_19758_02_020200_20210807T141723.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T021338_20210806T035507_19759_02_020200_20210807T155733.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T035507_20210806T053637_19760_02_020200_20210807T173816.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T053637_20210806T071807_19761_02_020200_20210807T192758.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T085936_20210806T104106_19763_02_020200_20210807T224817.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T104106_20210806T122235_19764_02_020200_20210808T005406.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T122235_20210806T140405_19765_02_020200_20210808T020838.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T140405_20210806T154534_19766_02_020200_20210808T034843.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T154534_20210806T172704_19767_02_020200_20210808T052850.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T172704_20210806T190833_19768_02_020200_20210808T071859.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T190833_20210806T205003_19769_02_020200_20210808T085914.nc <i>    
+<i> S5P_OFFL_L2__AER_AI_20210806T205003_20210806T223133_19770_02_020200_20210808T103926.nc <i>
+<i> S5P_OFFL_L2__AER_AI_20210806T223133_20210807T001302_19771_02_020200_20210808T121932.nc <i>
+
+**Alternatively, TROPOMI data can be downloaded using the sentinelsat package**. With sentinelsat package commands you can automatically donwload the needed files from the Sentinel-5P Pre-Operations Data Hub. In this case we download all 14 UVAI files for 6.8.2021. To do this we will use the string `S5P_OFFL_L2__AER_AI_20210806T*.nc` in the api query, that specifies the date but not the exact time. In case you would like to download only one file at a time, you can paste the complete filename to the query. Note that the size of each file is about 170 Mb. 
+
+
+```python
+filename = "S5P_OFFL_L2__AER_AI_20210806T*.nc"
+```
+
+
+```python
+api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
+api.download_all(api.query(filename=filename))
+```
+
+## 4. Viewing the content of the UVAI file (optional) <a name="paragraph4"></a>
+
+The TROPOMI data is read with HARP using `harp.import_product()` function. First as an example, we import one TROPOMI UVAI file and view its content. Remember to check that the path to the files is correct, pointing to the location of the UVAI files in your own computer, e.g.: 
+
+"/path/to/TROPOMI/S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc"   
+
+(Note that because the original netcdf file is large, importing the file might take a while.) 
+
+
+
+
+```python
+filename = "S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc"
+uvai_data = harp.import_product(filename)
+```
+
+After a succesfull import, you can view the contents of `uvai_data`:
+
+
+```python
+print(uvai_data)
+```
+
+    source product = 'S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc'
+    
+    int scan_subindex {time=1877850}
+    double datetime_start {time=1877850} [seconds since 2010-01-01]
+    float datetime_length [s]
+    int orbit_index
+    long validity {time=1877850}
+    float latitude {time=1877850} [degree_north]
+    float longitude {time=1877850} [degree_east]
+    float latitude_bounds {time=1877850, 4} [degree_north]
+    float longitude_bounds {time=1877850, 4} [degree_east]
+    float sensor_latitude {time=1877850} [degree_north]
+    float sensor_longitude {time=1877850} [degree_east]
+    float sensor_altitude {time=1877850} [m]
+    float solar_zenith_angle {time=1877850} [degree]
+    float solar_azimuth_angle {time=1877850} [degree]
+    float sensor_zenith_angle {time=1877850} [degree]
+    float sensor_azimuth_angle {time=1877850} [degree]
+    float surface_altitude {time=1877850} [m]
+    float surface_altitude_uncertainty {time=1877850} [m]
+    float surface_pressure {time=1877850} [Pa]
+    float surface_meridional_wind_velocity {time=1877850} [m/s]
+    float surface_zonal_wind_velocity {time=1877850} [m/s]
+    float absorbing_aerosol_index {time=1877850} []
+    float absorbing_aerosol_index_uncertainty {time=1877850} []
+    byte absorbing_aerosol_index_validity {time=1877850}
+    long index {time=1877850}
+    
+
+
+You can inspect the information of a specific `uvai_data` variable (listed above), e.g. the `absorbing_aerosol_index` that we will be using in this notebook: 
+
+
+```python
+print(uvai_data.absorbing_aerosol_index)
+```
+
+    type = float
+    dimension = {time=1877850}
+    unit = ''
+    valid_min = -inf
+    valid_max = inf
+    description = 'aerosol index'
+    data =
+    [nan nan nan ... nan nan nan]
+    
+
+
+From the listing above you see e.g. that the `absorbing_aerosol_index` has no unit, and that the index values can be either negative or positive. 
+
+## 5. Regridding level 2 data into level 3 grid <a name="paragraph5"></a>
+
+### Step 1: Operations in HARP import <a name="subparagraph1"></a>
+
+**Filtering and gridding of TROPOMI Level 2 data is done by including specific operations to the `harp.import_product()` function**. Please, look at [Use Case 1](https://atmospherictoolbox.org/usecases/usecase1/) for more detailed explanation on setting up different HARP operations. In this case the following operations will be performed by HARP while the data is imported: 
+ 
+**1)** `absorbing_aerosol_index_validity>80` : we only consider pixels for which the data quality is high enough. The basic **quality flag** in any TROPOMI Level 2 netcdf file is given as `qa_value`. In the [Product Readme File for UV Aerosol Index](https://sentinels.copernicus.eu/documents/247904/3541451/Sentinel-5P-Aerosol-Level-2-Product-Readme-File) you can find, that the basic recommendation for UVAI data is to use only those pixels where `qa_value > 0.8`. In HARP the `qa_value` is renamed as `absorbing_aerosol_index_validity` and the value of 80 is used instead of 0.8.
+
+**2)** `keep(latitude_bounds,longitude_bounds,datetime_start,datetime_length,absorbing_aerosol_index)`: keep only selected variable from the original netcdf files. HARP uses weighted area average to calculate the value for each new grid cell, and therefore the corner coordinates of each satellite pixel, provided by the latitude and longitude bounds are needed.
+
+**3)**  `derive(datetime_stop {time} [days since 2000-01-01])` and `derive(datetime_start [days since 2000-01-01])`: derive new variables from the data.  
+
+**4)** `exclude(datetime_length)`: exclude variable that is not needed. 
+
+**5)** `bin_spatial(81,50,0.5,721,-180,0.5)` : define the common Level 3 grid to combine the data from multiple orbits from one day into a single daily grid.  We define a new grid at 0.5 degrees resolution over the area covering the Northern hemisphere between 50N and 90N, and -180E to 180E. More detailed explanation of `bin_spatial()` regridding operation can be found in [Use Case 1, Step 4](https://atmospherictoolbox.org/usecases/usecase1/). 
+
+**6)** `derive(latitude {latitude})`and `derive(longitude {longitude})`:  derive lat and lon of the new common grid.
+ 
+
+**To apply all the HARP operations while importing the data, all the operation strings are joined together with python `join()` command.** The `operations` variable will be given as input to the `harp.import_product()` function. 
+
+
+```python
+operations = ";".join([
+    "absorbing_aerosol_index_validity>80",
+    "keep(latitude_bounds,longitude_bounds,datetime_start,datetime_length,absorbing_aerosol_index)",
+    "derive(datetime_stop {time} [days since 2000-01-01])",
+    "derive(datetime_start [days since 2000-01-01])",
+    "exclude(datetime_length)",
+    "bin_spatial(81,50,0.5,721,-180,0.5)",
+    "derive(latitude {latitude})",
+    "derive(longitude {longitude})",
+])
+```
+
+### Step 2: Create the merged product: reduce_operations <a name="subparagraph2"></a>
+
+
+This example uses aerosol index data from 14 orbits and HARP will concatenate these products together. However, to arrive at a common lat/lon grid, HARP needs to reduce these 14 orbit grids into a **single grid**. This is done by adding the `reduce_operations` parameter to the `harp.import_product()` function. The `reduce_operations` parameter can be constructed in a similar manner as the operations parameter, by separating the strings with ";". To create the merged data set, the following reduced operations will be applied:
+
+**1)** `squash(time, (latitude, longitude, latitude_bounds, longitude_bounds))`: remove the given dimension for the variable, assuming that the content for all items in the given dimension is the same.
+
+**2)** `bin()`: to perform the actual merging i.e. to perform an averaging in the time dimension such that all samples in the same bin get averaged 
+
+
+```python
+reduce_operations = "squash(time, (latitude, longitude, latitude_bounds, longitude_bounds));bin()"
+```
+
+### Step 3: Apply HARP import command to multiple input files <a name="subparagraph3"></a>
+
+Now that all the elements for `harp.import_product()` function are defined, the import command needs to be applied to all 14 TROPOMI UVAI files. When the files have all been stored in the same folder, importing the data is simple, just give the path (if needed) and the common part of the file names.
+
+
+```python
+filenames = "S5P_OFFL_L2__AER_AI_20210806T*.nc"
+```
+
+When gridding and merging several TROPOMI files execution of `harp.import_product()` may take a while, especially if the grid covers large area and/or the grid cell size is small. Now, the whole import command can be executed as : 
+
+
+```python
+merged = harp.import_product(filenames, operations, reduce_operations=reduce_operations)
+```
+
+You can view the contents of the merged data variable `merged` by:
+
+
+```python
+print(merged)
+```
+
+    history = "2021-11-05T15:35:04Z [harp-1.11] harp.import_product('S5P_OFFL_L2__AER_AI_20210806T*.nc',operations='absorbing_aerosol_index_validity>80;keep(latitude_bounds,longitude_bounds,datetime_start,datetime_length,absorbing_aerosol_index);derive(datetime_stop {time} [days since 2000-01-01]);derive(datetime_start [days since 2000-01-01]);exclude(datetime_length);bin_spatial(81,50,0.5,721,-180,0.5);derive(latitude {latitude});derive(longitude {longitude})',reduce_operations='squash(time, (latitude, longitude, latitude_bounds, longitude_bounds));bin()')"
+    
+    double datetime_start {time=1} [days since 2000-01-01]
+    double absorbing_aerosol_index {time=1, latitude=80, longitude=720} []
+    double datetime_stop {time=1} [days since 2000-01-01]
+    long count {time=1}
+    float weight {time=1, latitude=80, longitude=720}
+    double latitude_bounds {latitude=80, 2} [degree_north]
+    double longitude_bounds {longitude=720, 2} [degree_east]
+    double latitude {latitude=80} [degree_north]
+    double longitude {longitude=720} [degree_east]
+    
+
+
+As the print of the variables show, the re-gridded `absorbing_aerosol_index` variable has now two dimensions (in addition to time), latitude (80) and longitude (720).
+
+## 6. Plotting gridded level 3 data on a map <a name="paragraph6"></a>
+
+We use cartopy and `pcolormesh` function to visualise the merged AAI data on a map. The parameter we want to plot is the `absorbing_aerosol_index`. 
+
+The corner coordinates of each grid cell are provided by the `latitude_bounds` and `longitude_bounds` variables and these are required by the `pcolormesh` as the input for latitude and longitude. The `merged.latitude_bounds.data[:,0]` array gives the latitudes of the grid cell lower corners, whereas `merged.latitude_bounds.data[:,1]` gives the latitudes for upper corners. 
+
+To get the correct input for `pcolormesh`, we define the `gridlat` variable by appending the `merged.latitude_bounds.data[:,0]` array with the last element of the second array `merged.latitude_bounds.data[-1,1]`. The `gridlon` variable is defined similarly. More detailed description on  `pcolormesh` inputs can be found [here](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html).  
+
+
+```python
+gridlat = np.append(merged.latitude_bounds.data[:,0], merged.latitude_bounds.data[-1,1])
+gridlon = np.append(merged.longitude_bounds.data[:,0], merged.longitude_bounds.data[-1,1])
+```
+
+The actual parameter to be plotted is `absorbing_aerosol_index`. For colorbar label also description of the aerosol index data are read. In this plot we use colormap named `devon` from the [cmcrameri library](https://www.fabiocrameri.ch/colourmaps/). The vmin and vmax are defined for scaling of the colormap values. Positive values of AAI (>1) indicate the presence of absorbing aerosols at elevated amounts (in this case smoke), and therefore we limit the colorscale with vmin=1. 
+
+
+```python
+AAIval = merged.absorbing_aerosol_index.data
+AAIdescription = merged.absorbing_aerosol_index.description
+
+colortable = cm.devon_r
+
+vmin = 1
+vmax = 4
+```
+
+By using matplotlib `figsize` argument the figure size can be defined. `plt.axes` set up GeoAxes, and in this case the projection is `NorthPolarStereo` from cartopy. The area of interest is set by `set_extent` where the range for latitude and longitude for the plot are given. The actual data is plotted with `plt.pcolormesh` command. Note that the dimensions of the `absorbing_aerosol_index` are time, lat and lon, and therefore the input is given as `AAIval[0,:,:]`. Finally the colorbar is added with label text, and also the location of the colorbar is set. 
+
+
+```python
+fig = plt.figure(figsize=(20,10))
+ax = plt.axes(projection=ccrs.NorthPolarStereo())
+ax.set_extent([-180, 180, 50, 90], ccrs.PlateCarree())
+
+img = plt.pcolormesh(gridlon, gridlat, AAIval[0,:,:], vmin=vmin, vmax=vmax, cmap=colortable, transform=ccrs.PlateCarree())
+ax.coastlines()
+ax.gridlines()
+
+cbar = fig.colorbar(img, ax=ax,orientation='horizontal', fraction=0.04, pad=0.1)
+cbar.set_label(f'{AAIdescription}')
+cbar.ax.tick_params(labelsize=14)
+plt.show()
+```
+
+
+    
+![png](output_37_0.png)
+    
+
+
+## 7.  Save gridded data as netcdf <a name="paragraph7"></a>
+
+Using HARP you can also save the merged product into a new netcdf file. The data is saved by using HARP export command `harp.export_product`. The inputs are the merged product variable name and the name of the new netcdf product. 
+
+
+```python
+harp.export_product(merged, 's5p-AAI-2021Aug06_wildfiresmoke.nc')
+```
+
+## 8. References to HARP documentation <a name="harp_references"></a>
+
+- [HARP Ingestion definitions](http://stcorp.github.io/harp/doc/html/ingestions/index.html) 
+
+- [HARP operations documentation](http://stcorp.github.io/harp/doc/html/operations.html)
+
+The variables in the HARP product that results from an ingestion of Level 2 UVAI product data are listed here: 
+- [HARP_S5P_L2_UVAI](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_AER_AI.html)
+
+
+
+```python
+
+```
