@@ -6,9 +6,9 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.11.3
+      jupytext_version: 1.13.1
   kernelspec:
-    display_name: Python 3
+    display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
@@ -75,10 +75,9 @@ The second step is to import the TROPOMI Level 2 SO2 file using `harp.import_pro
 filename = "S5P_OFFL_L2__SO2____20210412T151823_20210412T165953_18121_01_020104_20210414T175908.nc"
 ```
 
-```python
-if not os.path.exists(filename):
-    api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus', show_progressbars=False)
-    api.download_all(api.query(filename=filename))
+```python tags=["remove_output"]
+api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus', show_progressbars=False)
+api.download_all(api.query(filename=filename))
 ```
 
 ```python

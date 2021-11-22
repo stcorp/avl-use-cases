@@ -1,4 +1,4 @@
-![VIIRS_RGB_smoke.png](attachment:VIIRS_RGB_smoke.png)
+![VIIRS_RGB_smoke.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase2/VIIRS_RGB_smoke.png)
 
 # Creating gridded Level 3 data with HARP from multiple TROPOMI Level 2 UVAI files
  
@@ -58,6 +58,12 @@ from cmcrameri import cm
 import sentinelsat
 ```
 
+```python tags=["remove_input", "remove_output"]
+import warnings
+from shapely.errors import ShapelyDeprecationWarning
+warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
+```
+
 ## 3. Downloading TROPOMI UVAI files (optional) <a name="paragraph3"></a>
 
 The TROPOMI UVAI data used in this notebook is obtained from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home). For Sentinel-5P each level 2 file contains information from one orbit. There are approximately 14 orbits per day.  This notebook uses TROPOMI UVAI data from 6th August 2021 including the following files: 
@@ -81,13 +87,13 @@ The TROPOMI UVAI data used in this notebook is obtained from the [Sentinel-5P Pr
 
 
 ```python
-filename = "S5P_OFFL_L2__AER_AI_20210806T*.nc"
+filename_pattern = "S5P_OFFL_L2__AER_AI_20210806T*.nc"
 ```
 
 
-```python
+```python tags=["remove_output"]
 api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
-api.download_all(api.query(filename=filename))
+api.download_all(api.query(filename=filename_pattern))
 ```
 
 ## 4. Viewing the content of the UVAI file (optional) <a name="paragraph4"></a>
@@ -113,53 +119,11 @@ After a succesfull import, you can view the contents of `uvai_data`:
 print(uvai_data)
 ```
 
-    source product = 'S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc'
-    
-    int scan_subindex {time=1877850}
-    double datetime_start {time=1877850} [seconds since 2010-01-01]
-    float datetime_length [s]
-    int orbit_index
-    long validity {time=1877850}
-    float latitude {time=1877850} [degree_north]
-    float longitude {time=1877850} [degree_east]
-    float latitude_bounds {time=1877850, 4} [degree_north]
-    float longitude_bounds {time=1877850, 4} [degree_east]
-    float sensor_latitude {time=1877850} [degree_north]
-    float sensor_longitude {time=1877850} [degree_east]
-    float sensor_altitude {time=1877850} [m]
-    float solar_zenith_angle {time=1877850} [degree]
-    float solar_azimuth_angle {time=1877850} [degree]
-    float sensor_zenith_angle {time=1877850} [degree]
-    float sensor_azimuth_angle {time=1877850} [degree]
-    float surface_altitude {time=1877850} [m]
-    float surface_altitude_uncertainty {time=1877850} [m]
-    float surface_pressure {time=1877850} [Pa]
-    float surface_meridional_wind_velocity {time=1877850} [m/s]
-    float surface_zonal_wind_velocity {time=1877850} [m/s]
-    float absorbing_aerosol_index {time=1877850} []
-    float absorbing_aerosol_index_uncertainty {time=1877850} []
-    byte absorbing_aerosol_index_validity {time=1877850}
-    long index {time=1877850}
-    
-
-
 You can inspect the information of a specific `uvai_data` variable (listed above), e.g. the `absorbing_aerosol_index` that we will be using in this notebook: 
-
 
 ```python
 print(uvai_data.absorbing_aerosol_index)
 ```
-
-    type = float
-    dimension = {time=1877850}
-    unit = ''
-    valid_min = -inf
-    valid_max = inf
-    description = 'aerosol index'
-    data =
-    [nan nan nan ... nan nan nan]
-    
-
 
 From the listing above you see e.g. that the `absorbing_aerosol_index` has no unit, and that the index values can be either negative or positive. 
 
@@ -180,7 +144,7 @@ From the listing above you see e.g. that the `absorbing_aerosol_index` has no un
 **5)** `bin_spatial(81,50,0.5,721,-180,0.5)` : define the common Level 3 grid to combine the data from multiple orbits from one day into a single daily grid.  We define a new grid at 0.5 degrees resolution over the area covering the Northern hemisphere between 50N and 90N, and -180E to 180E. More detailed explanation of `bin_spatial()` regridding operation can be found in [Use Case 1, Step 4](https://atmospherictoolbox.org/usecases/usecase1/). 
 
 **6)** `derive(latitude {latitude})`and `derive(longitude {longitude})`:  derive lat and lon of the new common grid.
- 
+
 
 **To apply all the HARP operations while importing the data, all the operation strings are joined together with python `join()` command.** The `operations` variable will be given as input to the `harp.import_product()` function. 
 
@@ -235,21 +199,8 @@ You can view the contents of the merged data variable `merged` by:
 print(merged)
 ```
 
-    history = "2021-11-05T15:35:04Z [harp-1.11] harp.import_product('S5P_OFFL_L2__AER_AI_20210806T*.nc',operations='absorbing_aerosol_index_validity>80;keep(latitude_bounds,longitude_bounds,datetime_start,datetime_length,absorbing_aerosol_index);derive(datetime_stop {time} [days since 2000-01-01]);derive(datetime_start [days since 2000-01-01]);exclude(datetime_length);bin_spatial(81,50,0.5,721,-180,0.5);derive(latitude {latitude});derive(longitude {longitude})',reduce_operations='squash(time, (latitude, longitude, latitude_bounds, longitude_bounds));bin()')"
-    
-    double datetime_start {time=1} [days since 2000-01-01]
-    double absorbing_aerosol_index {time=1, latitude=80, longitude=720} []
-    double datetime_stop {time=1} [days since 2000-01-01]
-    long count {time=1}
-    float weight {time=1, latitude=80, longitude=720}
-    double latitude_bounds {latitude=80, 2} [degree_north]
-    double longitude_bounds {longitude=720, 2} [degree_east]
-    double latitude {latitude=80} [degree_north]
-    double longitude {longitude=720} [degree_east]
-    
-
-
 As the print of the variables show, the re-gridded `absorbing_aerosol_index` variable has now two dimensions (in addition to time), latitude (80) and longitude (720).
+
 
 ## 6. Plotting gridded level 3 data on a map <a name="paragraph6"></a>
 
@@ -297,7 +248,7 @@ plt.show()
 ```
 
 
-    
+
 ![png](output_37_0.png)
     
 
@@ -321,7 +272,3 @@ The variables in the HARP product that results from an ingestion of Level 2 UVAI
 - [HARP_S5P_L2_UVAI](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_AER_AI.html)
 
 
-
-```python
-
-```

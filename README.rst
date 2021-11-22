@@ -39,6 +39,6 @@ A fully rendered notebook can be turned into HTML using::
 
 A one liner that goes directly from .md to .html is::
 
-  $ cat usecase1/notebook.md \
+  $ cat usecase1/Usecase_1_S5P_SO2_La_Soufriere.md \
   | jupytext --from md --to ipynb \
-  | jupyter nbconvert --execute --stdin --to html --output usecase1/notebook.html
+  | jupyter nbconvert --execute --stdin --to html --output usecase1/Usecase_1_S5P_SO2_La_Soufriere.html
