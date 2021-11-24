@@ -1,3 +1,18 @@
+---
+jupyter:
+  jupytext:
+    formats: md,ipynb
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
 ![VIIRS_RGB_smoke.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase2/VIIRS_RGB_smoke.png)
 
 # Creating gridded Level 3 data with HARP from multiple TROPOMI Level 2 UVAI files
@@ -93,7 +108,7 @@ filename_pattern = "S5P_OFFL_L2__AER_AI_20210806T*.nc"
 
 ```python tags=["remove_output"]
 api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
-api.download_all(api.query(filename=filename_pattern))
+result = api.download_all(api.query(filename=filename_pattern))
 ```
 
 ## 4. Viewing the content of the UVAI file (optional) <a name="paragraph4"></a>

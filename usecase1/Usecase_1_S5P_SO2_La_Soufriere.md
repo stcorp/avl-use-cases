@@ -77,7 +77,7 @@ filename = "S5P_OFFL_L2__SO2____20210412T151823_20210412T165953_18121_01_020104_
 
 ```python tags=["remove_output"]
 api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus', show_progressbars=False)
-api.download_all(api.query(filename=filename))
+result = api.download_all(api.query(filename=filename))
 ```
 
 ```python
