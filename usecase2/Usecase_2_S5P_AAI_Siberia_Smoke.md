@@ -246,13 +246,6 @@ cbar.set_label(f'{AAIdescription}')
 cbar.ax.tick_params(labelsize=14)
 plt.show()
 ```
-
-
-
-![png](output_37_0.png)
-    
-
-
 ## 7.  Save gridded data as netcdf <a name="paragraph7"></a>
 
 Using HARP you can also save the merged product into a new netcdf file. The data is saved by using HARP export command `harp.export_product`. The inputs are the merged product variable name and the name of the new netcdf product. 
