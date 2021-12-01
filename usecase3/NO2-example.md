@@ -95,19 +95,6 @@ lims = [0.0, 1e16]
 plot_no2_map(no2_tropomi[0,:,:], f'2x2 degree TROPOMI {no2_description} [{no2_unit}]', lims)
 plot_no2_map(no2_omiaura[0,:,:], f'2x2 degree OMI {no2_description} [{no2_unit}]', lims)
 ```
-
-
-    
-![png](output_6_0.png)
-    
-
-
-
-    
-![png](output_6_1.png)
-    
-
-
 ## Regridding and replotting the data
 
 We see that same kinds of features can be observed over Europe and Africa, but how do they compare? We can plot the difference of these products using the same function as before. Only the pixels where both of the instruments have data are plotted.
@@ -115,8 +102,6 @@ We see that same kinds of features can be observed over Europe and Africa, but h
 If we wish to do away with the empty streaks in the OMI data, we can do a more coarser gridding. It is possible to further process the data product with the HARP's ```execute_operations``` function. We'll define a 6 degrees by 6 degrees grid and regrid the data using the ```rebin``` HARP operation.
 
 We can then plot the regridded data and the difference using the same function we defined before.
-
-**Sander NOTE**: It seems that there is some problem with rebin. I get different kinds of errors which aren't too useful for debugging. Sander, maybe you could give a hand here?
 
 
 ```python
@@ -127,45 +112,15 @@ lat_grid_coarse = np.linspace(-90, 90, 30)
 lon_grid_coarse = np.linspace(-180,180,60)
 
 regrid_operations = ";".join([
-    "rebin(latitude_bounds [degree_north], %s)" % str(tuple(lat_grid_coarse)),
-    "rebin(longitude_bounds [degree_east], %s)" % str(tuple(lon_grid_coarse))
+    "rebin(latitude, latitude_bounds [degree_north], %s)" % str(tuple(lat_grid_coarse)),
+    "rebin(longitude, longitude_bounds [degree_east], %s)" % str(tuple(lon_grid_coarse))
 ])
 
-#CLibraryError: syntax error, unexpected '('
-error_unexpectedparen = False
-#IndexError: arrays used as indices must be of integer (or boolean) type
-error_integerindices = False
-
-if error_unexpectedparen:
-    no2_tropomi_coarse = harp.import_product(filename_tropomi,regrid_operations)
-elif error_integerindices:
-    no2_tropomi_coarse = harp.execute_operations(no2_tropomi,regrid_operations)
-    no2_omiaura_coarse = harp.execute_operations(no2_omiaura,regrid_operations)
+no2_tropomi_coarse = harp.execute_operations(product_tropomi,regrid_operations).NO2_column_number_density.data
+no2_omiaura_coarse = harp.execute_operations(product_omiaura,regrid_operations).NO2_column_number_density.data
 
 plot_no2_map(no2_tropomi_coarse[0,:,:], f'6x6 degree TROPOMI {no2_description} [{no2_unit}]', lims)
 plot_no2_map(no2_omiaura_coarse[0,:,:], f'6x6 degree OMI {no2_description} [{no2_unit}]', lims)
 plot_no2_map(no2_tropomi_coarse[0,:,:] - no2_omiaura_coarse[0,:,:],'2 degrees by 2 degrees TROPOMI - OMI difference',difference_lims)
 
 ```
-
-
-    
-![png](output_8_0.png)
-    
-
-
-
-    ---------------------------------------------------------------------------
-
-    NameError                                 Traceback (most recent call last)
-
-    /tmp/ipykernel_26144/4221422469.py in <module>
-         21     no2_omiaura_coarse = harp.execute_operations(no2_omiaura,regrid_operations)
-         22 
-    ---> 23 plot_no2_map(no2_tropomi_coarse[0,:,:], f'6x6 degree TROPOMI {no2_description} [{no2_unit}]', lims)
-         24 plot_no2_map(no2_omiaura_coarse[0,:,:], f'6x6 degree OMI {no2_description} [{no2_unit}]', lims)
-         25 plot_no2_map(no2_tropomi_coarse[0,:,:] - no2_omiaura_coarse[0,:,:],'2 degrees by 2 degrees TROPOMI - OMI difference',difference_lims)
-
-
-    NameError: name 'no2_tropomi_coarse' is not defined
-
