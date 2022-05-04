@@ -3,9 +3,12 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
+  - branca
   - cartopy
   - cmcrameri
   - coda
+  - folium
+  - geopandas
   - harp
   - ipywidgets
   - jupyterlab
