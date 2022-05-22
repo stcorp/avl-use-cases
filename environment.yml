@@ -2,19 +2,12 @@ name: avl
 channels:
   - conda-forge
 dependencies:
-  - python=3.9
+  - atmosphere-virtual-lab
   - branca
   - cartopy
   - cmcrameri
-  - coda
   - folium
   - geopandas
-  - harp
-  - ipywidgets
-  - jupyterlab
-  - jupytext
   - matplotlib
   - nodejs
-  - plotly
-  - requests
   - sentinelsat
