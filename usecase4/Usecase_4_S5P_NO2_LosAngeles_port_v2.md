@@ -1,4 +1,4 @@
-![S2_LA_Port_TrueRGB.jpg](attachment:S2_LA_Port_TrueRGB.jpg)
+![S2_LA_Port_TrueRGB.jpg](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase4/S2_LA_Port_TrueRGB.jpg)
 
 
 
@@ -49,11 +49,19 @@ import sentinelsat
 The TROPOMI NO2 level 2 data used in this notebook is obtained from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home). For Sentinel-5P each level 2 file contains information from one orbit. This notebook uses TROPOMI NO2 data between 11th and 17th October 2021. The orbits that cover the area of interest, i.e. port of Los Angeles, and used in this example are:
 - 20706, 20720, 20734, 20748, 20749, 20762, 20763, 20777, 20791
 
-An example on how to download data using the sentinelsat package can be found from [Use Case 2](https://atmospherictoolbox.org/media//usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html#paragraph3).
 
-Note that each TROPOMI NO2 file is about 450Mb, and downloading several files might take time. To download a specific orbit (e.g. 20706), the following input can be used for filename:
-
-`filename_pattern="S5P_OFFL_L2__NO2____*_20706*.nc"`
+```python
+api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
+result = api.download_all(api.query(filename="S5P_OFFL_L2__NO2____*_20706*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20720*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20734*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20748*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20749*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20762*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20763*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20777*.nc") |
+                          api.query(filename="S5P_OFFL_L2__NO2____*_20791*.nc"))
+```
 
 ## 4. Regridding level 2 data into level 3 grid <a name="paragraph4"></a>
 
@@ -74,7 +82,7 @@ Filtering and gridding of TROPOMI Level 2 data is done by defining specific oper
 
 `bin_spatial(51,33.50,0.02,51,-118.5,0.01)`
 
-**6)**`"derive(tropospheric_NO2_column_number_density [Pmolec/cm2])"`:convert the NO2 units to 10^15 molec/cm^2. 
+**6)** `derive(tropospheric_NO2_column_number_density [Pmolec/cm2])`: convert the NO2 units to 10^15 molec/cm^2. 
 
 
 ```python
@@ -177,13 +185,6 @@ cbar.ax.tick_params(labelsize=14)
 plt.show()
 
 ```
-
-
-    
-![png](output_25_0.png)
-    
-
-
 As the figure shows, NO2 concentrations are much higher at the Los Angeles downtown area than over the ocean, as expected, and it is difficult to say whether the ships have affected to the NO2 concentrations over the sea. There are many factors, e.g. meteorology, that affect the calculated weekly NO2 average, and therefore comparisons with corresponding time period from previous years is not straightforward. Filtering the data with respect to the surface wind speed (include only "weak" wind cases), somewhat reduces the meteorological effects. A reference data could be created averaging the same time period e.g. from 2019 and 2018. It should be noted, however, that the surface wind components are included in the TROPOMI NO2 data only from August 2019, and thus filtering according to wind speed is possibly with data only after that.  
 
 
