@@ -39,6 +39,7 @@ import pyproj
 import geopandas as gpd
 from shapely.geometry import Polygon
 import sentinelsat
+import avl
 ```
 
 ### 2. Obtaining data files for OMI and TROPOMI <a name="paragraph2"></a>
@@ -46,9 +47,9 @@ import sentinelsat
 
 The TROPOMI data file can be downloaded automatically using the sentinelsat library as in [use case 2](https://atmospherictoolbox.org/media//usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html#paragraph3). The TROPOMI file used in this exercise is:
 
-*S5P_OFFL_L2__NO2____20210713T113312_20210713T131441_19424_02_020200_20210715T052115.nc*
+*S5P_OFFL_L2_\_NO2_\_\_\_20210713T113312_20210713T131441_19424_02_020200_20210715T052115.nc*
 
-The OMI file needs to be downloaded manually. The OMI data can be found from [NASA GES DISC](https://disc.gsfc.nasa.gov/). The specific data set can be found by searching "OMNO2". To download the data one needs to have registered to NASA Earthdata. Note that currently there are two data sets for Level 2 OMI NO2 data available, make sure that the data file is named OMNO2. The OMI file that is used in this example is:
+The OMI file is downloaded from a cache of example data that is used for use cases like this. The original OMI data can be found on [NASA GES DISC](https://disc.gsfc.nasa.gov/). The specific data set can be found by searching "OMNO2". To download the data one needs to have registered to NASA Earthdata. Note that currently there are two data sets for Level 2 OMI NO2 data available, make sure that the data file is named OMNO2. The OMI file that is used in this example is:
 
 *OMI-Aura_L2-OMNO2_2021m0713t1219-o90393_v003-2021m0824t153120.he5*
 
@@ -56,6 +57,9 @@ The OMI file needs to be downloaded manually. The OMI data can be found from [NA
 ```python
 filename_tropomi = "S5P_OFFL_L2__NO2____20210713T113312_20210713T131441_19424_02_020200_20210715T052115.nc"
 filename_omi = "OMI-Aura_L2-OMNO2_2021m0713t1219-o90393_v003-2021m0824t153120.he5"
+api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
+result = api.download_all(api.query(filename=filename_tropomi))
+result = avl.download(filename_omi)
 ```
 
 ### 3. HARP import for OMI and TROPOMI NO2 <a name="paragraph3"></a>
@@ -274,9 +278,9 @@ display(map_tropomi)
 ### 6. References<a name="paragraph6"></a>
 
 - [HARP ingestion of OMI NO2](https://stcorp.github.io/harp/doc/html/ingestions/OMI_L2_OMSO2.html)
--[HARP ingestion of TROPOMI NO2](https://stcorp.github.io/harp/doc/html/ingestions/index.html#s5p-l2-no2)
+- [HARP ingestion of TROPOMI NO2](https://stcorp.github.io/harp/doc/html/ingestions/index.html#s5p-l2-no2)
 - [NASA GES DISC](https://disc.gsfc.nasa.gov/)
 - [OMI NO2 Readme](https://aura.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level2/OMNO2.003/doc/README.OMNO2.pdf)
 - [OMI Data User Guide](https://docserver.gesdisc.eosdis.nasa.gov/repository/Mission/OMI/3.3_ScienceDataProductDocumentation/3.3.2_ProductRequirements_Designs/README.OMI_DUG.pdf)
--[TROPOMI NO2 Readme](https://sentinel.esa.int/documents/247904/3541451/Sentinel-5P-Nitrogen-Dioxide-Level-2-Product-Readme-File)
--[TROPOMI Product User Manual](https://sentinel.esa.int/documents/247904/2474726/Sentinel-5P-Level-2-Product-User-Manual-Nitrogen-Dioxide)
+- [TROPOMI NO2 Readme](https://sentinel.esa.int/documents/247904/3541451/Sentinel-5P-Nitrogen-Dioxide-Level-2-Product-Readme-File)
+- [TROPOMI Product User Manual](https://sentinel.esa.int/documents/247904/2474726/Sentinel-5P-Level-2-Product-User-Manual-Nitrogen-Dioxide)
