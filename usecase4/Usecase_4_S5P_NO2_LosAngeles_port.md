@@ -50,7 +50,7 @@ The TROPOMI NO2 level 2 data used in this notebook is obtained from the [Sentine
 - 20706, 20720, 20734, 20748, 20749, 20762, 20763, 20777, 20791
 
 
-```python
+```python tags=["remove_output"]
 api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
 result = api.download_all(api.query(filename="S5P_OFFL_L2__NO2____*_20706*.nc") |
                           api.query(filename="S5P_OFFL_L2__NO2____*_20720*.nc") |
