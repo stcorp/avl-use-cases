@@ -56,6 +56,8 @@ We are using the sentinelsat python package here to perform the download for us.
 import avl 
 import harp
 import sentinelsat
+import warnings
+warnings.filterwarnings('ignore')
 
 filename_tropomi = 'S5P_OFFL_L2__CO_____20220718T123656_20220718T141826_24674_03_020400_20220720T110230.nc'
 api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus', show_progressbars=False)
