@@ -1,6 +1,7 @@
 ---
 jupyter:
   jupytext:
+    formats: md,ipynb
     text_representation:
       extension: .md
       format_name: markdown
@@ -13,7 +14,7 @@ jupyter:
 ---
 
 
-![usecase5_banner.png](attachment:31435538-ecb5-4125-b430-19430b2b428d.png)
+![usecase5_banner.png](https://github.com/stcorp/avl-use-cases/raw/master/usecase5/usecase5_banner.png)
 # Reading Aeolus wind profile data with HARP
 
 
@@ -34,7 +35,7 @@ This use case demonstrates the use of `HARP` for reading and plotting **wind pro
 
 The Aeolus Scientific **L2B Rayleigh/Mie wind product** provides geo-located **HLOS (horizontal line-of-sight)** wind profile. HLOS is the the wind component along satellite's horizontal line-of-sight, which is approximately zonally oriented but not exactly the same as commonly used zonal ("U") wind  component. An illustration of the HLOS wind component definition can be found e.g. from [Krisch et al.2022](https://amt.copernicus.org/articles/15/3465/2022/):    
 
-![example_aerolus_HLOS_Krisch_2022.png](attachment:32d89cab-db0a-4aa3-bc1e-7da8ae6b9153.png)
+![example_aerolus_HLOS_Krisch_2022.png](https://github.com/stcorp/avl-use-cases/raw/master/usecase5/example_aerolus_HLOS_Krisch_2022.png)
 
 The Aeolus level 2B scientific wind data can be downloaded from several sources: 
 - ESA [HTTP browser](https://aeolus-ds.eo.esa.int/oads/access/), 
@@ -53,6 +54,7 @@ In order for this notebook to work properly, you will need `HARP` version 1.16 (
 
 ```python
 import harp
+import avl
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import PolyCollection
@@ -86,6 +88,12 @@ operations = ";".join([
     "derive(hlos_wind_velocity [m/s])",
     "derive(altitude_bounds [km])"
 ])
+```
+
+For this specific product, we can download it from the AVL example data archive:
+
+```python
+result = avl.download(file_in)
 ```
 
 After defining the operations, the Aeolus file is imported as:
