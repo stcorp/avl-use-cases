@@ -1,0 +1,15 @@
+name: avl
+channels:
+  - conda-forge
+dependencies:
+  - atmosphere-virtual-lab
+  - branca
+  - cartopy
+  - cmcrameri
+  - folium
+  - geopandas
+  - matplotlib
+  - netcdf4
+  - nodejs
+  - sentinelsat
+  - vtk>=9.1=osmesa*
