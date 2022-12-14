@@ -12,3 +12,4 @@ dependencies:
   - netcdf4
   - nodejs
   - sentinelsat
+  - jupyter_server<2

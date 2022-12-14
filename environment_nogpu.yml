@@ -13,3 +13,4 @@ dependencies:
   - nodejs
   - sentinelsat
   - vtk>=9.1=osmesa*
+  - jupyter_server<2
