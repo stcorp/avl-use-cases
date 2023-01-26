@@ -88,14 +88,14 @@ First the imported harp object will be plotted on a 2D interactive map. For this
 
 ```python
 variable='CO_column_volume_mixing_ratio'
-avl.Geo(tropomi_co, variable,colormap="rainbow",colorrange=(0, 200), opacity=0.7,showcolorbar=True)
+avl.Geo(tropomi_co, variable,colormap="rainbow",colorrange=(0, 200), opacity=0.7)
 ```
 
 Now you can zoom in the interactive map to see the CO emission plumes from the wildfires in France, Spain, and Portugal. The data is automatically overlayed on top of the OpenStreetMap so that locating the plumes geographically e.g. close to cities is easy. The zoom level as well as the center latitude and longitude can be also set in the plotting command:     
 
 
 ```python
-avl.Geo(tropomi_co, variable,colormap="rainbow",colorrange=(0, 200), opacity=0.7, centerlat=44, centerlon=-10, zoom=5, showcolorbar=True)
+avl.Geo(tropomi_co, variable,colormap="rainbow",colorrange=(0, 200), opacity=0.7, centerlat=44, centerlon=-10, zoom=5)
 ```
 ### 4. Plotting 3D map with avl <a name="paragraph4"></a>
 
