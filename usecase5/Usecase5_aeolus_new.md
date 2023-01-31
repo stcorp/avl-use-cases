@@ -13,7 +13,7 @@ jupyter:
 ---
 
 
-![usecase5_banner.png](attachment:31435538-ecb5-4125-b430-19430b2b428d.png)
+![usecase5_banner.png](https://github.com/stcorp/avl-use-cases/raw/master/usecase5/usecase5_banner.png)
 # Reading and plotting Aeolus wind profile data with updated Atmospheric Virtual Laboratory 
 
 
@@ -33,9 +33,9 @@ This use case demonstrates the use of `Atmospheric Vitual Laboratory` functional
 
 ## 1. Obtaining Level 2B Aeolus Scientific wind product <a name="paragraph1"></a>
 
-Aeolus Scientific **L2B Rayleigh/Mie wind product** provides geo-located **HLOS (horizontal line-of-sight)** wind profile. HLOS is the the wind component along satellite's horizontal line-of-sight, which is approximately zonally oriented but not exactly the same as commonly used zonal ("U") wind  component. An illustration of the HLOS wind component definition can be found e.g. from [Krisch et al.2022](https://amt.copernicus.org/articles/15/3465/2022/):    
+The Aeolus Scientific **L2B Rayleigh/Mie wind product** provides geo-located **HLOS (horizontal line-of-sight)** wind profile. HLOS is the the wind component along satellite's horizontal line-of-sight, which is approximately zonally oriented but not exactly the same as commonly used zonal ("U") wind  component. An illustration of the HLOS wind component definition can be found e.g. from [Krisch et al.2022](https://amt.copernicus.org/articles/15/3465/2022/):
 
-![example_aerolus_HLOS_Krisch_2022.png](attachment:32d89cab-db0a-4aa3-bc1e-7da8ae6b9153.png)
+![example_aerolus_HLOS_Krisch_2022.png](https://github.com/stcorp/avl-use-cases/raw/master/usecase5/example_aerolus_HLOS_Krisch_2022.png)
 
 The Aeolus level 2B scientific wind data can be downloaded from several sources: 
 - ESA [HTTP browser](https://aeolus-ds.eo.esa.int/oads/access/), 
