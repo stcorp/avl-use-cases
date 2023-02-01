@@ -54,7 +54,6 @@ For this notebook `HARP` version 1.17 (or newer) is needed. In order to get the 
 
 You can create the conda environment using `conda env create -f environment.yml`. After running this command you can activate the new environment by `conda activate avl` and open jupyter-lab. 
 
-The sc
 <!-- #endregion -->
 
 ```python
