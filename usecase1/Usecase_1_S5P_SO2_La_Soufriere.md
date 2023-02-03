@@ -33,7 +33,7 @@ In the steps below this tutorial shows
 ## Initial preparations
 
 To follow this notebook some preparations are needed. The TROPOMI SO2 data used in this notebook is obtained
-from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home). Short instructions on how to download the data can be found here (*add link).
+from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home).
 
 This example uses the following TROPOMI SO2 file obtained at 12.4.2021:
 
