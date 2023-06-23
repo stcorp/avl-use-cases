@@ -24,7 +24,7 @@ Running jupyterlab
 
 Start jupyterlab within your conda environment with::
 
-  $ jupiter-lab
+  $ jupyter-lab
 
 Within jupiter-lab select a use case .md file and select 'open as notebook'.
 When you then save the opened notebook this will automatically generate a .ipynb file.
