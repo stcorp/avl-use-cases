@@ -26,7 +26,7 @@ Start jupyterlab within your conda environment with::
 
   $ jupyter-lab
 
-Within jupiter-lab select a use case .md file and select 'open as notebook'.
+Within jupyter-lab select a use case .md file and select 'open as notebook'.
 When you then save the opened notebook this will automatically generate a .ipynb file.
 Any modifications in the .md or .ipynb file will be automatically synchronized to the other file.
 
