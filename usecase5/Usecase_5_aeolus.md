@@ -46,7 +46,7 @@ The Aeolus level 2B scientific wind data can be downloaded from several sources:
 The links to access the data as well as data desriptions can be found from [here](https://earth.esa.int/eogateway/catalog/aeolus-scientific-l2b-rayleigh-mie-wind-product). **It is important to note that the files need to be downloaded in their native format as ".DBL"**, since this is the file format supported by HARP for Aeolus. If the VirES service is used for data download, the users should use the "Package original files" option to obtain the .DBL files instead of netcdf.
 
 This notebook uses Aeolus Rayleigh wind data from 29th January 2022. The specific file is:
-`AE_OPER_ALD_U_N_2B_20220129T152853_20220129T17004_0001.DBL`
+`AE_OPER_ALD_U_N_2B_20220129T152853_20220129T170004_0001.DBL`
 
 <!-- #region tags=[] -->
 ## 2. Python packages for the notebook <a name="paragraph2"></a>
