@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.4
+      jupytext_version: 1.14.6
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -37,7 +37,7 @@ from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus
 
 This example uses the following TROPOMI SO2 file obtained at 12.4.2021:
 
-`S5P_OFFL_L2__SO2____20210412T151823_20210412T165953_18121_01_020104_20210414T175908.nc`
+`S5P_RPRO_L2__SO2____20210412T151823_20210412T165953_18121_03_020401_20230209T050738.nc`
 
 
 
@@ -64,20 +64,21 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import cartopy.crs as ccrs
 from cmcrameri import cm
-import requests
-import sentinelsat
-import shutil
+import avl
 ```
 
-The second step is to import the TROPOMI Level 2 SO2 file using `harp.import_product()`. If the file does not yet exist on your local machine, we use the sentinel1sat library to automatically download the file from the Sentinel-5P Pre-Operations Data Hub. (Because the original netcdf file is large, both downloading and importing the file might take a while.)
+The second step is to import the TROPOMI Level 2 SO2 file using `harp.import_product()`. If the file does not yet exist on your local machine, we use the avl library to automatically download the file from the Copernicus Dataspace Ecosystem (CDSE). (Because the original netcdf file is large, both downloading and importing the file might take a while.)
 
 ```python
-filename = "S5P_OFFL_L2__SO2____20210412T151823_20210412T165953_18121_01_020104_20210414T175908.nc"
+filename = "S5P_RPRO_L2__SO2____20210412T151823_20210412T165953_18121_03_020401_20230209T050738.nc"
 ```
 
+Note that downloading data from the CDSE using `avl.download` requires S3 credentials that can be obtained as described [in the online CDSE documentation](https://documentation.dataspace.copernicus.eu/APIs/S3.html).
+You can set the environment variables programatically using `os.environ["CDSE_S3_ACCESS"] = "XXXXXXXXXXXXXXXXXXXX"` and `os.environ["CDSE_S3_SECRET"] = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"` and replacing the XXX values with the credentials you got from the CDSE.
+Alternatively, you can download the file manually and put it in the same directory as this notebook.
+
 ```python tags=["remove_output"]
-api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus', show_progressbars=False)
-result = api.download_all(api.query(filename=filename))
+avl.download(filename)
 ```
 
 ```python
@@ -175,7 +176,7 @@ All these operations will be performed by HARP while the data is being read, and
 
 In the following, the HARP operations that are performed when importing data are here given as "operations" variable, that includes each HARP operation (name, condition) as string. All the applied HARP operations are separated with ";" and finally joined together with `join()` command. With "keep" operation it is defined which variables from the original netcdf files are imported, while "derive" operation performs the conversion from original units to dobson units. After joining the operations together you can print the resulting string using the `print()` command. In Python defining an "operations" string parameter is a convenient way to define and keep track on different operations to be applied when importing the data. Other option would be to write the operations as an input to the HARP import command as: "operation1;operation2;operation3".
 
-```python tags=[]
+```python
 operations = ";".join([
     "latitude>-20;latitude<40",
     "SO2_column_number_density_validity>50",
@@ -195,7 +196,7 @@ reduced_product = harp.import_product(filename, operations)
 
 You will see that importing the data now goes a _lot_ faster. If we print the contents of the `reduced_product`, it shows that the variable consists only those parameters we requested, and the SO2 units are as DU. Also the time dimension of the data is less than in Step 1, because only those pixels between -20S-40N have been considered:
 
-```python tags=[]
+```python
 print(reduced_product)
 ```
 

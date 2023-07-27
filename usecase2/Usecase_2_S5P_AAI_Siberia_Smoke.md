@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.4
+      jupytext_version: 1.14.6
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -69,7 +69,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 from cmcrameri import cm
-import sentinelsat
+import avl
 ```
 
 ```python tags=["remove_input", "remove_output"]
@@ -82,39 +82,53 @@ warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
 
 The TROPOMI UVAI data used in this notebook is obtained from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home). For Sentinel-5P each level 2 file contains information from one orbit. There are approximately 14 orbits per day.  This notebook uses TROPOMI UVAI data from 6th August 2021 including the following files:
 
-<i> `S5P_OFFL_L2__AER_AI_20210806T003208_20210806T021338_19758_02_020200_20210807T141723.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T021338_20210806T035507_19759_02_020200_20210807T155733.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T035507_20210806T053637_19760_02_020200_20210807T173816.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T053637_20210806T071807_19761_02_020200_20210807T192758.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T085936_20210806T104106_19763_02_020200_20210807T224817.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T104106_20210806T122235_19764_02_020200_20210808T005406.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T122235_20210806T140405_19765_02_020200_20210808T020838.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T140405_20210806T154534_19766_02_020200_20210808T034843.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T154534_20210806T172704_19767_02_020200_20210808T052850.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T172704_20210806T190833_19768_02_020200_20210808T071859.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T190833_20210806T205003_19769_02_020200_20210808T085914.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T205003_20210806T223133_19770_02_020200_20210808T103926.nc` </i>
-<i> `S5P_OFFL_L2__AER_AI_20210806T223133_20210807T001302_19771_02_020200_20210808T121932.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T003208_20210806T021338_19758_03_020400_20221026T213121.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T021338_20210806T035507_19759_03_020400_20221026T213201.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T035507_20210806T053637_19760_03_020400_20221026T213206.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T053637_20210806T071807_19761_03_020400_20221026T213209.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T071807_20210806T085936_19762_03_020400_20221026T213211.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T085936_20210806T104106_19763_03_020400_20221026T213218.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T104106_20210806T122235_19764_03_020400_20221026T213219.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T122235_20210806T140405_19765_03_020400_20221026T213933.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T140405_20210806T154534_19766_03_020400_20221026T213938.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T154534_20210806T172704_19767_03_020400_20221026T213939.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T172704_20210806T190833_19768_03_020400_20221026T213943.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T190833_20210806T205003_19769_03_020400_20221026T213945.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T205003_20210806T223133_19770_03_020400_20221026T213953.nc` </i>
+<i> `S5P_RPRO_L2__AER_AI_20210806T223133_20210807T001302_19771_03_020400_20221026T213954.nc` </i>
 
-**Alternatively, TROPOMI data can be downloaded using the sentinelsat package**. With sentinelsat package commands you can automatically donwload the needed files from the Sentinel-5P Pre-Operations Data Hub. In this case we download all 14 UVAI files for 6.8.2021. To do this we will use the string `S5P_OFFL_L2__AER_AI_20210806T*.nc` in the api query, that specifies the date but not the exact time. In case you would like to download only one file at a time, you can paste the complete filename to the query. Note that the size of each file is about 170 Mb.
+**Alternatively, TROPOMI data can be downloaded using the avl.download function**. With the avl.download command you can automatically download the needed files from the Copernicus Dataspace Ecosystem. In this case we download all 14 UVAI files for 6.8.2021. Note that the size of each file is about 170 Mb.
 
 
 ```python
-filename_pattern = "S5P_OFFL_L2__AER_AI_20210806T*.nc"
+filenames = [
+    "S5P_RPRO_L2__AER_AI_20210806T003208_20210806T021338_19758_03_020400_20221026T213121.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T021338_20210806T035507_19759_03_020400_20221026T213201.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T035507_20210806T053637_19760_03_020400_20221026T213206.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T053637_20210806T071807_19761_03_020400_20221026T213209.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T071807_20210806T085936_19762_03_020400_20221026T213211.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T085936_20210806T104106_19763_03_020400_20221026T213218.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T104106_20210806T122235_19764_03_020400_20221026T213219.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T122235_20210806T140405_19765_03_020400_20221026T213933.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T140405_20210806T154534_19766_03_020400_20221026T213938.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T154534_20210806T172704_19767_03_020400_20221026T213939.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T172704_20210806T190833_19768_03_020400_20221026T213943.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T190833_20210806T205003_19769_03_020400_20221026T213945.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T205003_20210806T223133_19770_03_020400_20221026T213953.nc",
+    "S5P_RPRO_L2__AER_AI_20210806T223133_20210807T001302_19771_03_020400_20221026T213954.nc",
+]
 ```
 
 
 ```python tags=["remove_output"]
-api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
-result = api.download_all(api.query(filename=filename_pattern))
+avl.download(filenames)
 ```
 
 ## 4. Viewing the content of the UVAI file (optional) <a name="paragraph4"></a>
 
 The TROPOMI data is read with HARP using `harp.import_product()` function. First as an example, we import one TROPOMI UVAI file and view its content. Remember to check that the path to the files is correct, pointing to the location of the UVAI files in your own computer, e.g.:
 
-"/path/to/TROPOMI/S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc"
+"/path/to/TROPOMI/S5P_RPRO_L2__AER_AI_20210806T071807_20210806T085936_19762_03_020400_20221026T213211.nc"
 
 (Note that because the original netcdf file is large, importing the file might take a while.)
 
@@ -122,7 +136,7 @@ The TROPOMI data is read with HARP using `harp.import_product()` function. First
 
 
 ```python
-filename = "S5P_OFFL_L2__AER_AI_20210806T071807_20210806T085936_19762_02_020200_20210807T210809.nc"
+filename = "S5P_RPRO_L2__AER_AI_20210806T071807_20210806T085936_19762_03_020400_20221026T213211.nc"
 uvai_data = harp.import_product(filename)
 ```
 
@@ -196,7 +210,7 @@ Now that all the elements for `harp.import_product()` function are defined, the 
 
 
 ```python
-filenames = "S5P_OFFL_L2__AER_AI_20210806T*.nc"
+filenames = "S5P_RPRO_L2__AER_AI_20210806T*.nc"
 ```
 
 When gridding and merging several TROPOMI files execution of `harp.import_product()` may take a while, especially if the grid covers large area and/or the grid cell size is small. Now, the whole import command can be executed as :
