@@ -64,7 +64,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import cartopy.crs as ccrs
 from cmcrameri import cm
-import avl
+import eofetch
 ```
 
 The second step is to import the TROPOMI Level 2 SO2 file using `harp.import_product()`. If the file does not yet exist on your local machine, we use the avl library to automatically download the file from the Copernicus Dataspace Ecosystem (CDSE). (Because the original netcdf file is large, both downloading and importing the file might take a while.)
@@ -73,12 +73,11 @@ The second step is to import the TROPOMI Level 2 SO2 file using `harp.import_pro
 filename = "S5P_RPRO_L2__SO2____20210412T151823_20210412T165953_18121_03_020401_20230209T050738.nc"
 ```
 
-Note that downloading data from the CDSE using `avl.download` requires S3 credentials that can be obtained as described [in the online CDSE documentation](https://documentation.dataspace.copernicus.eu/APIs/S3.html).
-You can set the environment variables programatically using `os.environ["CDSE_S3_ACCESS"] = "XXXXXXXXXXXXXXXXXXXX"` and `os.environ["CDSE_S3_SECRET"] = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"` and replacing the XXX values with the credentials you got from the CDSE.
+We use _eofetch_ to download the S5P product. To be able to perform the download yourself you will need to retrieve and configure credentials as described [in the eofetch README](https://github.com/stcorp/eofetch#readme).
 Alternatively, you can download the file manually and put it in the same directory as this notebook.
 
 ```python tags=["remove_output"]
-avl.download(filename)
+eofetch.download(filename)
 ```
 
 ```python

@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.4
+      jupytext_version: 1.14.6
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -55,11 +55,10 @@ We are using the sentinelsat python package here to perform the download for us.
 # atmosphere-virtual-lab is imported with the name avl
 import avl 
 import harp
-import sentinelsat
+import eofetch
 
-filename_tropomi = 'S5P_OFFL_L2__CO_____20220718T123656_20220718T141826_24674_03_020400_20220720T110230.nc'
-api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus', show_progressbars=False)
-result = api.download_all(api.query(filename=filename_tropomi))
+filename_tropomi = 'S5P_RPRO_L2__CO_____20220718T123656_20220718T141826_24674_03_020400_20230113T012004.nc'
+eofetch.download(filename_tropomi)
 ```
 
 Next the operations for importing the TROPOMI CO product are defined, and the data is imported with harp. In this example we will use the `carbonmonoxide_total_column_corrected` variable instead of the default  `carbonmonoxide_total_column`. From TROPOMI CO processor version 2.x.x onwards the fixed masked destriping method has been implemented to correct for the "stripes" visible in the CO observations (probably due to calibration issues), and a new parameter `carbonmonoxide_total_column_corrected` has been included. To use this new parameter, in harp import a new option of `co=corrected` needs to be added. The recommended quality assurance value for CO is qa>0.5 (with harp 50), but it is also recommended to take a look of the different qa value definitions explained in the [product Readme file](https://sentinels.copernicus.eu/documents/247904/3541451/Sentinel-5P-Carbon-Monoxide-Level-2-Product-Readme-File).

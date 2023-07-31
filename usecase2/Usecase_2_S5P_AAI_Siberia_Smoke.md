@@ -69,7 +69,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 from cmcrameri import cm
-import avl
+import eofetch
 ```
 
 ```python tags=["remove_input", "remove_output"]
@@ -97,7 +97,7 @@ The TROPOMI UVAI data used in this notebook is obtained from the [Sentinel-5P Pr
 <i> `S5P_RPRO_L2__AER_AI_20210806T205003_20210806T223133_19770_03_020400_20221026T213953.nc` </i>
 <i> `S5P_RPRO_L2__AER_AI_20210806T223133_20210807T001302_19771_03_020400_20221026T213954.nc` </i>
 
-**Alternatively, TROPOMI data can be downloaded using the avl.download function**. With the avl.download command you can automatically download the needed files from the Copernicus Dataspace Ecosystem. In this case we download all 14 UVAI files for 6.8.2021. Note that the size of each file is about 170 Mb.
+**Alternatively, TROPOMI data can be downloaded using the eofetch.download function**. With the eofetch.download command you can automatically download the needed files from the Copernicus Dataspace Ecosystem. In this case we download all 14 UVAI files for 6.8.2021. Note that the size of each file is about 170 Mb.
 
 
 ```python
@@ -121,7 +121,7 @@ filenames = [
 
 
 ```python tags=["remove_output"]
-avl.download(filenames)
+eofetch.download(filenames)
 ```
 
 ## 4. Viewing the content of the UVAI file (optional) <a name="paragraph4"></a>

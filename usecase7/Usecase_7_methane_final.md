@@ -5,7 +5,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.7
+      jupytext_version: 1.14.6
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -33,7 +33,7 @@ This example case focuses on detecting methane (CH4) plumes from oil/gas product
 
 The TROPOMI methane product data file provides the **column average dry air mixing ratio** of methane, **XCH4**.  This notebook uses TROPOMI methane data  from **12th March 2023** (orbit number 28034):
 
-`"S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc`
+`S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc`
 
 The TROPOMI level 2 data used in this notebook can be downloaded 
 - from [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home),
@@ -55,6 +55,7 @@ The preparations needed to set up avl is shown in [Use case 6](https://atmospher
 ```python
 import harp
 import avl
+import eofetch
 ```
 
 ## 3. Plotting single overpass XCH4 data on a map using AVL <a name="paragraph4"></a>
@@ -67,6 +68,7 @@ When when importing the methane data the following operations are done:
 
 ```python
 filename_tropomi = "S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc"
+eofetch.download(filename_tropomi)
 operations_avl = ";".join([
     "CH4_column_volume_mixing_ratio_dry_air_validity>50", 
     "latitude>34;latitude<43","longitude>5;latitude<67"])

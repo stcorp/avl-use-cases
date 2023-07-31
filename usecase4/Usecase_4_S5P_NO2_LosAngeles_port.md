@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.io.img_tiles as cimgt
 from cmcrameri import cm
-import sentinelsat
+import eofetch
 ```
 
 ## 3. Downloading TROPOMI NO2 files (optional) <a name="paragraph3"></a>
@@ -51,16 +51,18 @@ The TROPOMI NO2 level 2 data used in this notebook is obtained from the [Sentine
 
 
 ```python tags=["remove_output"]
-api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
-result = api.download_all(api.query(filename="S5P_OFFL_L2__NO2____*_20706*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20720*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20734*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20748*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20749*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20762*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20763*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20777*.nc") |
-                          api.query(filename="S5P_OFFL_L2__NO2____*_20791*.nc"))
+filenames = [
+    "S5P_RPRO_L2__NO2____20211011T200531_20211011T214700_20706_03_020400_20221105T135504.nc",
+    "S5P_RPRO_L2__NO2____20211012T194622_20211012T212752_20720_03_020400_20221105T141035.nc",
+    "S5P_RPRO_L2__NO2____20211013T192714_20211013T210844_20734_03_020400_20221107T063813.nc",
+    "S5P_RPRO_L2__NO2____20211014T190806_20211014T204936_20748_03_020400_20221105T142626.nc",
+    "S5P_RPRO_L2__NO2____20211014T204936_20211014T223105_20749_03_020400_20221105T142627.nc",
+    "S5P_RPRO_L2__NO2____20211015T184858_20211015T203028_20762_03_020400_20221105T143409.nc",
+    "S5P_RPRO_L2__NO2____20211015T203028_20211015T221157_20763_03_020400_20221105T143410.nc",
+    "S5P_RPRO_L2__NO2____20211016T201119_20211016T215249_20777_03_020400_20221105T143432.nc",
+    "S5P_RPRO_L2__NO2____20211017T195211_20211017T213341_20791_03_020400_20221105T144233.nc",
+]
+eofetch.download(filenames)
 ```
 
 ## 4. Regridding level 2 data into level 3 grid <a name="paragraph4"></a>

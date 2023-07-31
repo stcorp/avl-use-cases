@@ -38,7 +38,7 @@ import folium
 import pyproj
 import geopandas as gpd
 from shapely.geometry import Polygon
-import sentinelsat
+import eofetch
 import avl
 ```
 
@@ -55,10 +55,9 @@ The OMI file is downloaded from a cache of example data that is used for use cas
 
 
 ```python tags=["remove_output"]
-filename_tropomi = "S5P_OFFL_L2__NO2____20210713T113312_20210713T131441_19424_02_020200_20210715T052115.nc"
+filename_tropomi = "S5P_RPRO_L2__NO2____20210713T113312_20210713T131441_19424_03_020400_20221104T113602.nc"
 filename_omi = "OMI-Aura_L2-OMNO2_2021m0713t1219-o90393_v003-2021m0824t153120.he5"
-api = sentinelsat.SentinelAPI('s5pguest', 's5pguest', 'https://s5phub.copernicus.eu/dhus')
-result = api.download_all(api.query(filename=filename_tropomi))
+eofetch.download(filename_tropomi)
 result = avl.download(filename_omi)
 ```
 
