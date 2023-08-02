@@ -6,6 +6,7 @@ dependencies:
   - branca
   - cartopy
   - cmcrameri
+  - eofetch
   - folium
   - geopandas
   - matplotlib
