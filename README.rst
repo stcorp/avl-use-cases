@@ -1,13 +1,13 @@
 Creating a conda environment
 ----------------------------
 
-Create new 'avl' environment with::
+Create new avl conda environment with::
 
   $ conda env create -f environment.yml
 
 Then activate the environment with::
 
-  $ conda activate avl
+  $ conda activate avl-use-cases
 
 
 After updating the environment.yml you can update the 'avl' environment using::
@@ -16,7 +16,7 @@ After updating the environment.yml you can update the 'avl' environment using::
 
 To use a different environment name use e.g.::
 
-  $ conda env create -n avltest -f environment.yml
+  $ conda env create -n my-env-name -f environment.yml
 
 
 Running jupyterlab

@@ -1,4 +1,4 @@
-name: avl
+name: avl-use-cases
 channels:
   - conda-forge
 dependencies:
