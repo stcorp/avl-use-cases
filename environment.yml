@@ -8,5 +8,4 @@ dependencies:
   - eofetch
   - folium
   - geopandas
-  - matplotlib
   - netcdf4

@@ -8,7 +8,6 @@ dependencies:
   - eofetch
   - folium
   - geopandas
-  - matplotlib
   - netcdf4
   - vtk>=9.1=osmesa*
   - jupyter_server<2
