@@ -45,7 +45,7 @@ import avl
 ### 2. Obtaining data files for OMI and TROPOMI <a name="paragraph2"></a>
 
 
-The TROPOMI data file can be downloaded automatically using the sentinelsat library as in [use case 2](https://atmospherictoolbox.org/media//usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html#paragraph3). The TROPOMI file used in this exercise is:
+The TROPOMI data file can be downloaded automatically using the eofetch library as in [use case 2](https://atmospherictoolbox.org/media//usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html#paragraph3). The TROPOMI file used in this exercise is:
 
 *S5P_OFFL_L2_\_NO2_\_\_\_20210713T113312_20210713T131441_19424_02_020200_20210715T052115.nc*
 

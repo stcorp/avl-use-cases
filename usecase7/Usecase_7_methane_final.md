@@ -38,7 +38,7 @@ The TROPOMI methane product data file provides the **column average dry air mixi
 The TROPOMI level 2 data used in this notebook can be downloaded 
 - from [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home),
 - from [new Copernicus dataspace browser](https://dataspace.copernicus.eu/browser/),
-- using the sentinelsat-package, eg. as in [Use case 2](https://atmospherictoolbox.org/media//usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html#paragraph3).
+- using the eofetch package, eg. as in [Use case 2](https://atmospherictoolbox.org/media//usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html#paragraph3).
  
 In addition to the offline timeliness (_OFFL_) the TROPOMI methane files may have reprocessed version available (_RPRO_) that should be used if available. More information about the data product and e.g. reprocerssing can be found from the following documents:
 
@@ -107,7 +107,7 @@ avl.Histogram(ch4product, varname, bins=50)
 
 ## 6. References <a name="harp_references"></a>
 
-- [HARP S5P_L2_CH4](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_CH4.html)
+- [HARP S5P\_L2\_CH4](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_CH4.html)
 - [HARP operations documentation](http://stcorp.github.io/harp/doc/html/operations.html)
 - [Github demos of AVL plotting](https://github.com/stcorp/avl-demo-lps2022)
 - [CH4 Product Readme File](https://sentinels.copernicus.eu/documents/247904/3541451/Sentinel-5P-Methane-Product-Readme-File).

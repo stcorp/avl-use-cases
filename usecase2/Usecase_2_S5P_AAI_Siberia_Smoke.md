@@ -46,7 +46,7 @@ For more information on TROPOMI UVAI product can be found here:
 
 ## 2. Python packages for the notebook <a name="paragraph2"></a>
 
-In addition to HARP, this notebook uses several other Python packages that needs to be installed before executing the notebook:
+In addition to HARP, this notebook uses several other Python packages that need to be installed before executing the notebook:
 
 - **harp**: for reading and handling of TROPOMI data
 - **numpy**: for working with arrays
@@ -54,9 +54,9 @@ In addition to HARP, this notebook uses several other Python packages that needs
 - **cartopy**: for geospatial data processing, e.g. for plotting maps
 - **cmcrameri**: for universally readable scientific colormaps
 
-In case you want to download the TROPOMI files automatically from the Sentinel-5P Pre-Operations Data Hub, you will need also:
+In case you want to download the TROPOMI files automatically from the Copernicus Data Space Ecosystem, you will also need:
 
-- **sentinelsat**: for searching, downloading and retrieving the metadata of Sentinel satellite images from the Copernicus Open Access Hub.
+- **eofetch**: for downloading of Sentinel satellite data products from the Copernicus Data Space Ecosystem.
 
 Note that if you have installed HARP in some specific python environment, check that you have activated the environment before running the scripts.
 
@@ -80,7 +80,7 @@ warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
 
 ## 3. Downloading TROPOMI UVAI files (optional) <a name="paragraph3"></a>
 
-The TROPOMI UVAI data used in this notebook is obtained from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home). For Sentinel-5P each level 2 file contains information from one orbit. There are approximately 14 orbits per day.  This notebook uses TROPOMI UVAI data from 6th August 2021 including the following files:
+The TROPOMI UVAI data used in this notebook is obtained from the [Copernicus Data Space Ecosystem](https://dataspace.copernicus.eu). For Sentinel-5P each level 2 file contains information from one orbit. There are approximately 14 orbits per day.  This notebook uses TROPOMI UVAI data from 6th August 2021 including the following files:
 
 <i> `S5P_RPRO_L2__AER_AI_20210806T003208_20210806T021338_19758_03_020400_20221026T213121.nc` </i>
 <i> `S5P_RPRO_L2__AER_AI_20210806T021338_20210806T035507_19759_03_020400_20221026T213201.nc` </i>

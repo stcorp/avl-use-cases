@@ -34,7 +34,7 @@ These  plotting commands create a Jupyter widget called ipyleaflet which a very 
 
 The easiest way to get started with `atmospheric-virtual-lab` is to create a new conda environment and pre-install the required packages. Here we create a new conda environment called `avl_env`, and install required packages as follows:
 
-`$ conda create -c conda-forge -n avl_env atmosphere-virtual-lab sentinelsat`
+`$ conda create -c conda-forge -n avl_env atmosphere-virtual-lab`
 
 Before running the jupyter lab and this notebook the environment needs to be activated:
 
