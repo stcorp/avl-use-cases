@@ -6,13 +6,12 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.14.4
+      jupytext_version: 1.15.2
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
-
 
 ![usecase5_banner.png](https://github.com/stcorp/avl-use-cases/raw/master/usecase5/usecase5_banner.png)
 # Reading and plotting Aeolus wind profile data with updated Atmospheric Virtual Laboratory
@@ -48,21 +47,19 @@ The links to access the data as well as data desriptions can be found from [here
 This notebook uses Aeolus Rayleigh wind data from 29th January 2022. The specific file is:
 `AE_OPER_ALD_U_N_2B_20220129T152853_20220129T170004_0001.DBL`
 
-<!-- #region tags=[] -->
+
 ## 2. Python packages for the notebook <a name="paragraph2"></a>
 
 For this notebook `HARP` version 1.17 (or newer) is needed. In order to get the proper versions of packages it is recommended to re-create your conda environment using [this environment.yml file](https://github.com/stcorp/avl-use-cases/blob/master/environment.yml).
 
 You can create the conda environment using `conda env create -f environment.yml`. After running this command you can activate the new environment by `conda activate avl` and open jupyter-lab.
 
-<!-- #endregion -->
 
 ```python
 import avl
 import harp
 ```
 
-<!-- #region tags=[] -->
 ## 3. Read wind data using HARP <a name="paragraph3"></a>
 
 First, the operations for `harp.import_product` are defined that are used to ingest data from the Aeolus wind product. These include the selection of the latitude and longitude limits for the area of interest, as well as the validity check for the data. The following variables that result from ingestion with HARP of the Aeolus L2B Rayleigh wind data are kept in the imported product:
@@ -73,7 +70,6 @@ First, the operations for `harp.import_product` are defined that are used to ing
 - altitude_bounds: altitude relative to geoid of layer boundaries for each accumulation 
 
 It is noted that the default ingestion option for variable `hlos_wind_velocity` is the Rayleigh HLOS wind profile. Finally with `derive` the units of wind velocity and altitude are converted into m/s and km, respectively.
-<!-- #endregion -->
 
 ```python
 file_in="AE_OPER_ALD_U_N_2B_20220129T152853_20220129T170004_0001.DBL"

@@ -1,5 +1,19 @@
-![S2_LA_Port_TrueRGB.jpg](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase4/S2_LA_Port_TrueRGB.jpg)
+---
+jupyter:
+  jupytext:
+    formats: md,ipynb
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.15.2
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
 
+![S2_LA_Port_TrueRGB.jpg](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase4/S2_LA_Port_TrueRGB.jpg)
 
 
 # Temporally averaged Level 3 data from TROPOMI L2 NO2 observations
@@ -122,7 +136,7 @@ To apply the harp import function to all the needed files, wildcard `*` can be u
 
 
 ```python
-files_in="S5P_OFFL_L2__NO2____202110*.nc"
+files_in="S5P_RPRO_L2__NO2____202110*.nc"
 ```
 
 and finally run `harp_import()`:

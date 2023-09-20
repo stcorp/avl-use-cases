@@ -1,3 +1,18 @@
+---
+jupyter:
+  jupytext:
+    formats: md,ipynb
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.15.2
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
 ![madrid_banner.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase3/madrid_banner.png)
 
 # Comparison of OMI and TROPOMI spatial resolution of NO2 observations at  city scale
@@ -136,8 +151,7 @@ First step is to create an empty GeoDataFrame for TROPMI data. For GeoDataFrame 
 
 ```python
 crs = 'epsg:4326'
-tropomi = gpd.GeoDataFrame()
-tropomi['geometry'] = None
+tropomi = gpd.GeoDataFrame(geometry=gpd.GeoSeries())
 tropomi.crs = crs
 ```
 
@@ -166,8 +180,7 @@ The GeoDataFrame for OMI is created similar way:
 
 
 ```python
-omi = gpd.GeoDataFrame()
-omi['geometry'] = None
+omi = gpd.GeoDataFrame(geometry=gpd.GeoSeries())
 omi.crs = crs
 
 idx2 = omi_NO2.latitude_bounds.data.shape[0]
