@@ -49,8 +49,8 @@ The TROPOMI level 2 data used in this notebook can be downloaded using the eofet
 
 ```python
 import os
-os.environ["CDSE_S3_ACCESS"]="BGKTSQGZVXRNO2PCSLPF"
-os.environ["CDSE_S3_SECRET"]="AW2XcYVJtG9yGz3Sg1tYhMOyLOHVyP1RyWZQnKba"
+os.environ["CDSE_S3_ACCESS"]="xxx"
+os.environ["CDSE_S3_SECRET"]="yyy"
 ```
 
 ```python
