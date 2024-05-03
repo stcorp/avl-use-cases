@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qdoas>
+  <paths>
+    <!-- upto 10 paths can be specified (index 0 to 9). Any file or directory name in the  -->
+    <!-- raw_spectra tree that begins with %? (where ? is a single digit) is expanded with -->
+    <!-- the correponding path.                                                            -->
+
+  </paths>
+  <symbols>
+    <symbol name="bro" descr="" />
+    <symbol name="ch2o" descr="" />
+    <symbol name="h2o" descr="" />
+    <symbol name="no2" descr="" />
+    <symbol name="o3223" descr="" />
+    <symbol name="o3228" descr="" />
+    <symbol name="o3243" descr="" />
+    <symbol name="o3lambda" descr="" />
+    <symbol name="o3squared" descr="" />
+    <symbol name="o4" descr="" />
+    <symbol name="oclo" descr="" />
+    <symbol name="ring" descr="" />
+    <symbol name="so2" descr="" />
+  </symbols>
+  <project name="HCHO" disable="false">
+    <display spectra="true" data="true" calib="true" fits="true">
+      <field name="specno" />
+      <field name="date_time" />
+      <field name="latit" />
+      <field name="longit" />
+      <field name="sza" />
+      <field name="azim" />
+      <field name="los_za" />
+      <field name="los_azimuth" />
+      <field name="tifrac" />
+    </display>
+    <selection>
+      <sza min="0.000" max="70.000" delta="0.000" />
+      <elevation min="0.000" max="0.000" tol="0.000" />
+      <reference angle="90.000" tol="10.000" />
+      <record min="0" max="0" />
+      <cloud min="0.000" max="1.000" />
+      <geolocation selected="none">
+        <circle radius="0.000" long="0.000" lat="0.000" />
+        <rectangle west="0.000" east="0.000" south="0.000" north="0.000" />
+        <sites radius="0.000" />
+      </geolocation>
+    </selection>
+    <analysis method="ODF" fit="none" unit="nm" interpolation="spline" gap="1" converge="0.001" max_iterations="3" spike_tolerance="5" >
+      <!-- method        : ODF ML+SVD -->
+      <!-- fit           : none instr -->
+      <!-- unit          : pixel nm -->
+      <!-- interpolation : linear spline -->
+    </analysis>
+    <lowpass_filter selected="none">
+      <kaiser cutoff="0.000000" tolerance="0.000000" passband="0.000000" iterations="1" cal="false" fit="false" div="false" />
+      <boxcar width="1" iterations="1" cal="false" fit="false" div="false" />
+      <gaussian fwhm="1.000000" iterations="1" cal="false" fit="false" div="false" />
+      <triangular width="1" iterations="1" cal="false" fit="false" div="false" />
+      <savitzky_golay width="1" order="2" iterations="1" cal="false" fit="false" div="false" />
+      <binomial width="1" iterations="1" cal="false" fit="false" div="false" />
+    </lowpass_filter>
+    <highpass_filter selected="none">
+      <kaiser cutoff="0.000000" tolerance="0.000000" passband="0.000000" iterations="1" cal="false" fit="false" div="false" />
+      <boxcar width="1" iterations="1" cal="false" fit="false" div="false" />
+      <gaussian fwhm="1.000000" iterations="1" cal="false" fit="false" div="false" />
+      <triangular width="1" iterations="1" cal="false" fit="false" div="false" />
+      <savitzky_golay width="1" order="2" iterations="1" cal="false" fit="false" div="false" />
+      <binomial width="1" iterations="1" cal="false" fit="false" div="false" />
+    </highpass_filter>
+    <calibration ref="./data/sao2010_solref_vac.dat" method="ODF">
+      <line shape="file" lorentzorder="1" slfFile="./data/band_3_row_225.txt" />
+      <display spectra="true" fits="true" residual="true" shiftsfp="true" />
+      <polynomial shift="2" sfp="2" />
+      <window min="325.0" max="365.0" intervals="5" custom_windows="325.00-332.00,332.00-339.00,339.00-360.00,360.00-360.00,360.00-365.00," division="contiguous" size="10.00" />
+      <preshift calculate="false" min="-3.0" max="3.0" />
+      <cross_sections>
+      </cross_sections>
+      <sfps>
+        <sfp index="1" fit="true" init="1.000" delta="0.010" fstr="true" estr="true" />
+        <sfp index="2" fit="true" init="1.000" delta="0.010" fstr="true" estr="true" />
+        <sfp index="3" fit="false" init="1.000" delta="0.001" fstr="false" estr="false" />
+      </sfps>
+      <linear xpoly="2" xbase="none" xfit="true" xerr="false" offpoly="none" offfit="false" offerr="false" offizero="false" />
+      <shift_stretches>
+        <shift_stretch shfit="true"  stfit="1st" shstr="false" ststr="false" errstr="false" shini="0.000e+00" stini="0.000e+00" stini2="0.000e+00" shdel="1.0000e-03" stdel="1.0000e-03" stdel2="1.0000e-03" shmin="0.000e+00" shmax="0.000e+00" >
+          <symbol name="Ref" />
+        </shift_stretch>
+      </shift_stretches>
+      <gaps>
+      </gaps>
+      <outputs>
+      </outputs>
+    </calibration>
+    <undersampling ref="./data/sao2010_solref_vac.dat" method="fixed" shift="0.010000" />
+    <instrumental format="tropomi" site="No Site Specified" saa_convention="0-south" >
+      <ascii size="0" format="line" zen="false" azi="false" ele="false" date="false" time="false" lambda="false" straylight="false" lambda_min="0" lambda_max="0" calib="" transmission="" />
+      <logger type="all" azi="false" calib="" instr="" />
+      <acton type="old" calib="" instr="" />
+      <pdaegg type="all" azi="false" calib="" instr="" />
+      <pdaeggold type="all" azi="false" calib="" instr="" />
+      <pdaeggold type="all" azi="false" calib="" instr="" />
+      <ccdohp96 calib="" instr="" ipv="" dnl="" />
+      <ccdha94 calib="" instr="" ipv="" dnl="" />
+      <saozvis type="zenithal" calib="" instr="" />
+      <saozefm straylight="false" lambda_min="0" lambda_max="0"      calib="" instr="" />
+      <mfc size="0" first="0" revert="false" auto="false" omask="0" imask="0" dmask="0" smask="0" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" dark="" offset="" />
+      <mfcbira size="0" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <mfcstd size="0" revert="false" straylight="false" date="" lambda_min="0" lambda_max="0" calib="" instr="" dark="" offset="" />
+      <rasas straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <pdasieasoe straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <ccdeev size="0" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" image="" stray="" dnl=""  type="all" />
+      <gdpnetcdf type="1a" pixel="all" calib="" instr="" />
+      <gdpbin type="1a" pixel="all" calib="" instr="" />
+      <sciapds channel="1" sunref="" calib="" instr="" dnl="" />
+      <uoft straylight="false" lambda_min="0" lambda_max="0"      calib="" instr="" />
+      <noaa straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <omi type="uv2" min="0.0" max="0.0" ave="false" trackSelection="" pixelQF_rejectionFlag="false" pixelQF_maxGaps="5" pixelQF_mask="63" xTrackMode="IGNORE" calib="" instr="" />
+      <tropomi band="BAND3" reference_orbit_dir="" trackSelection="" calib="" instr="" />
+      <gems trackSelection="" calib="" instr="" />
+      <apex trackSelection="" calib="" instr="" />
+      <gome2 type="1a" calib="" instr="" />
+      <mkzy straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <biraairborne size="2048" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <biramobile size="2048" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <oceanoptics size="0" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
+      <frm4doas size="0" straylight="false" lambda_min="0" lambda_max="0" type="all" calib="" instr="" />
+    </instrumental>
+    <slit ref="./data/sao2010_solref_vac.dat" fwhmcor="false">
+      <slit_func type="none">
+        <file file="" wveDptFlag="false" file2="" />
+        <gaussian fwhm="0.010" wveDptFlag="false" file="" />
+        <lorentz width="0.000" order="1" wveDptFlag="false" file="" />
+        <voigt fwhmleft="0.000" fwhmright="0.000" glrleft="0.000" glrright="0.000" wveDptFlag="false" file="" file2="" />
+        <error fwhm="0.000" width="0.000" wveDptFlag="false" file="" file2="" />
+        <agauss fwhm="0.000" asym="0.000" wveDptFlag="false" file="" file2="" />
+        <supergauss fwhm="0.000" expTerm="0.000" asym="0.000" wveDptFlag="false" file="" file2="" file3="" />
+        <boxcarapod resolution="0.000" phase="0.000" />
+        <nbsapod resolution="0.000" phase="0.000" />
+      </slit_func>
+    </slit>
+    <output path="./data/automatic" anlys="true" calib="true" ref="false" conf="false" dirs="true" file="true" success="false" flux="340" cic=" " bandWidth="5.000000" swathName="QDOAS" fileFormat=".nc">
+      <field name="tifrac" />
+      <field name="specno" />
+      <field name="sza" />
+      <field name="azim" />
+      <field name="los_za" />
+      <field name="los_azimuth" />
+      <field name="latit" />
+      <field name="longit" />
+      <field name="rms" />
+      <field name="iter_number" />
+      <field name="year" />
+      <field name="julian" />
+      <field name="orbit" />
+      <field name="date_time" />
+      <field name="chi" />
+      <field name="refshift" />
+      <field name="sat_height" />
+      <field name="earth_radius" />
+      <field name="error_flag" />
+      <field name="num_bands" />
+      <field name="center_wavelength" />
+      <field name="corner_longitudes" />
+      <field name="corner_latitudes" />
+    </output>
+    <export path="" titles="true" dir="true" >
+    </export>
+    <analysis_window name="w200_bro_rad" disable="false" kurucz="ref" refsel="file" min="328.500" max="359.000" resol_fwhm="0.500" lambda0="343.750" >
+      <display spectrum="true" poly="true" fits="true" residual="true" predef="true" ratio="true" />
+      <files refone="./data/S5P_OFFL_L1B_IR_UVN_20230608T005615_20230608T023745_29278_03_020100_20230608T042535.nc"
+             reftwo="./data/rar_20230608.nc"
+             residual=""
+szacenter="45.000" szadelta="45.000" scanmode="after" minlon="150.000" maxlon="250.000" minlat="-5.000" maxlat="5.000" refns="50" cloudfmin="0.000" cloudfmax="1.000" 
+              maxdoasrefmode="sza" 
+             east="true" center="true" west="true" backscan="true" />
+      <cross_sections>
+        <cross_section sym="o3223" ortho="Differential XS" subtract="" subtract_flag="false" cstype="io" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="5.000e+19" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/O3223_Serdyuchenko(2014)_223K_213-1100nm(2013 version).xs" amffile="" />
+        <cross_section sym="o3243" ortho="Differential XS" subtract="" subtract_flag="false" cstype="io" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="5.000e+19" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/O3243_Serdyuchenko(2014)_243K_213-1100nm(2013 version).xs" amffile="" />
+        <cross_section sym="bro" ortho="Differential XS" subtract="" subtract_flag="false" cstype="std" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="0.000e+00" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/bro_Fleischmann(2004)_223K_300-385nm.xs" amffile="" />
+        <cross_section sym="ch2o" ortho="Differential XS" subtract="" subtract_flag="false" cstype="std" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="0.000e+00" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/ch2o_MellerMoortgat(2000)_298K_224.56-376.00nm(0.01nm).xs" amffile="" />
+        <cross_section sym="no2" ortho="Differential XS" subtract="" subtract_flag="false" cstype="std" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="0.000e+00" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/no2_VANDAELE_1998_220K.xs" amffile="" />
+        <cross_section sym="o3lambda" ortho="Differential XS" subtract="" subtract_flag="false" cstype="std" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="0.000e+00" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/o3lambda_serdyunchenko_223.xs" amffile="" />
+        <cross_section sym="o3squared" ortho="Differential XS" subtract="" subtract_flag="false" cstype="std" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="0.000e+00" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/o3squared_serdyunchenko_223.xs" amffile="" />
+        <cross_section sym="o4" ortho="Differential XS" subtract="" subtract_flag="false" cstype="std" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="0.000e+00" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/o4_thalman_volkamer_293K.xs" amffile="" />
+        <cross_section sym="ring" ortho="Differential XS" subtract="" subtract_flag="false" cstype="ring" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="0.000e+00" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/ring_sao2010_hr_norm.xs" amffile="" />
+      </cross_sections>
+      <linear xpoly="5" xbase="2" xfit="true" xerr="true" offpoly="1" offfit="true" offerr="true" offizero="true" />
+      <nonlinear solfit="false" solinit="0.000" soldelt="0.001" solfstr="false" solestr="false"
+                 o0fit="false" o0init="0.000" o0delt="0.001" o0fstr="false" o0estr="false"
+                 o1fit="false" o1init="0.000" o1delt="0.001" o1fstr="false" o1estr="false"
+                 o2fit="false" o2init="0.000" o2delt="0.001" o2fstr="false" o2estr="false"
+                 comfit="false" cominit="0.000" comdelt="0.001" comstr="false" comestr="false"
+                 u1fit="false" u1init="0.000" u1delt="0.001" u1str="false" u1estr="false"
+                 u2fit="false" u2init="0.000" u2delt="0.001" u2str="false" u2estr="false"
+                 resolfit="false" resolinit="0.000" resoldelt="0.001" resolstr="false" resolestr="false"
+                 comfile=""
+                 u1file=""
+                 u2file=""
+                 ramfile="" />
+      <shift_stretches>
+        <shift_stretch shfit="true"  stfit="1st" shstr="true" ststr="true" errstr="false" shini="0.000e+00" stini="0.000e+00" stini2="0.000e+00" shdel="1.0000e-03" stdel="1.0000e-03" stdel2="1.0000e-03" shmin="0.000e+00" shmax="0.000e+00" >
+          <symbol name="Spectrum" />
+        </shift_stretch>
+      </shift_stretches>
+      <gaps>
+      </gaps>
+      <outputs>
+        <output sym="o3223" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="o3243" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="bro" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="ch2o" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="no2" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="o3lambda" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="o3squared" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="o4" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+        <output sym="ring" amf="false" scol="true" serr="true" sfact="1.000" rescol="0.000000e+00" vcol="false" verr="false" vfact="1.000" />
+      </outputs>
+    </analysis_window>
+    <raw_spectra>
+      <!-- Disable file, folder and directory items with the disable set equal to "true". -->
+      <!--  The default is enabled.                                                       -->
+    </raw_spectra>
+  </project>
+</qdoas>
