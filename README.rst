@@ -30,6 +30,12 @@ Within jupyter-lab select a use case .md file and select 'open as notebook'.
 When you then save the opened notebook this will automatically generate a .ipynb file.
 Any modifications in the .md or .ipynb file will be automatically synchronized to the other file.
 
+You can also have jupyterlab open .md files as notebooks by default by using:
+
+  $ jupytext-config set-default-viewer markdown
+  $ jupytext-config list-default-viewer
+  markdown: Jupytext Notebook
+
 
 Creating HTML page
 ------------------
