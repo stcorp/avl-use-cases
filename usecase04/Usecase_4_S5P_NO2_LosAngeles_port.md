@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.15.2
+      jupytext_version: 1.16.2
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -182,7 +182,7 @@ Next the base map is defined, and NO2 data is plotted. In this example a map til
 boundaries=[-118.5, -117.5, 33.5, 34.0] 
 
 fig = plt.figure(figsize=(10,10))
-bmap=cimgt.Stamen(style='toner-lite')
+bmap=cimgt.OSM()
 ax = plt.axes(projection=bmap.crs)
 ax.set_extent(boundaries,crs = ccrs.PlateCarree())
 

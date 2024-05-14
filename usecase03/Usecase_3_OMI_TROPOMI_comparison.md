@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.15.2
+      jupytext_version: 1.16.2
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -224,7 +224,7 @@ In this use case we are illustrating the satellite data resolution at a city sca
 
 
 ```python
-madrid_map = folium.Map(location=[40.416775, -3.703790], zoom_start=8, tiles='Stamen Terrain')
+madrid_map = folium.Map(location=[40.416775, -3.703790], zoom_start=8)
 
 style1 = {'fillColor': 'none', 'color': '#dd3497'}
 style2 = {'fillColor': 'none', 'color': '#4a1486'}
