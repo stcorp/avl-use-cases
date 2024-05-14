@@ -22,41 +22,35 @@ This example case focuses on detecting methane (CH4) plumes from oil/gas product
 
 ### Table of contents
 
-1. [TROPOMI Level 2 methane data](#paragraph1)
-2. [Python packages for the notebook](#paragraph2)
+1. [Python packages for the notebook](#paragraph1)
+2. [TROPOMI Level 2 methane data](#paragraph2)
 3. [Plotting XCH4 data on a map using AVL](#paragraph4)
 4. [AVL scatter and histogram plots](#paragraph5)
 5. [References](#harp_references)
 
 
 
-### 1. TROPOMI Level 2 methane data <a name="paragraph1"></a>
+## 1. Python packages for the notebook <a name="paragraph1"></a>
 
-The TROPOMI methane product data file provides the **column average dry air mixing ratio** of methane, **XCH4**.  This notebook uses TROPOMI methane data  from **12th March 2023** (orbit number 28034):
-
-`S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc`
-
-The TROPOMI level 2 data used in this notebook can be downloaded 
-- from [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home),
-- from [new Copernicus dataspace browser](https://dataspace.copernicus.eu/browser/),
-- using the eofetch package, eg. as in [Use case 2](https://atmospherictoolbox.org/media//usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html#paragraph3).
- 
-In addition to the offline timeliness (_OFFL_) the TROPOMI methane files may have reprocessed version available (_RPRO_) that should be used if available. More information about the data product and e.g. reprocerssing can be found from the following documents:
-
-- [CH4 Product Readme File](https://sentinels.copernicus.eu/documents/247904/3541451/Sentinel-5P-Methane-Product-Readme-File).
-- [CH4 Algorithm Thoretical Basis Document](https://sentinels.copernicus.eu/documents/247904/2476257/Sentinel-5P-TROPOMI-ATBD-Methane-retrieval.pdf)
-- [CH4 Product User Manual](https://sentinels.copernicus.eu/documents/247904/2474726/Sentinel-5P-Level-2-Product-User-Manual-Methane.pdf)
-
-
-
-## 2. Python packages for the notebook <a name="paragraph2"></a>
-
-The preparations needed to set up avl is shown in [Use case 6](https://atmospherictoolbox.org/media/usecases/Usecase_6_CO_European_wildfires_2022.html#paragraph1). Following packages are needed to run this notebook:
+The preparations needed to set up avl is shown in [Use case 6](https://atmospherictoolbox.org/media/usecases/Usecase_6_CO_European_wildfires_2022.html#paragraph1). Following packages are needed to run this notebook (eofetch is used for data download):
 
 ```python
 import harp
 import avl
 import eofetch
+```
+
+### 2. TROPOMI Level 2 methane data <a name="paragraph2"></a>
+
+The TROPOMI methane product data file provides the **column average dry air mixing ratio** of methane, **XCH4**.  This notebook uses TROPOMI methane data  from **12th March 2023** (orbit number 28034):
+
+`S5P_RPRO_L2__CH4____20210612T125610_20210612T143739_18985_03_020400_20221124T220051.nc`
+
+The TROPOMI level 2 data used in this notebook can be downloaded using the eofetch package. To be able to perform `eofetch.download`, you must have environment variables, CDSE_S3_ACCESS and CDSE_S3_SECRET, set as described in in [eofetch README](https://github.com/stcorp/eofetch#readme).
+
+```python
+filename="S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc"
+eofetch.download(filename)
 ```
 
 ## 3. Plotting single overpass XCH4 data on a map using AVL <a name="paragraph4"></a>
@@ -68,8 +62,6 @@ When when importing the methane data the following operations are done:
 **2)** `latitude>34;latitude<43,longitude>5;latitude<67`: to cut the data over Turkmenistan.
 
 ```python
-filename_tropomi = "S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc"
-eofetch.download(filename_tropomi)
 operations_avl = ";".join([
     "CH4_column_volume_mixing_ratio_dry_air_validity>50", 
     "latitude>34;latitude<43","longitude>5;latitude<67"])
@@ -78,7 +70,7 @@ operations_avl = ";".join([
 The parameter to be viewed is the **bias corrected XCH4**, i.e., the column volume mixing ratio that is corrected for the dependence on surface albedo. To change the default XCH4 to the bias correceted XCH4, ingestion option `"ch4=bias_corrected"` needs to be applied when importing the data: 
 
 ```python
-ch4product=harp.import_product(filename_tropomi, operations_avl, options="ch4=bias_corrected")
+ch4product=harp.import_product(filename, operations_avl, options="ch4=bias_corrected")
 ```
 
 To plot the methane observations on the map,  the `avl.Geo` is used as in [Use case 6](https://atmospherictoolbox.org/media/usecases/Usecase_6_CO_European_wildfires_2022.html#paragraph3). The variable name to be plotted is `"CH4_column_volume_mixing_ratio_dry_air"` :
@@ -106,11 +98,15 @@ The imported methane data over Turkmenistan can be also represented as an histog
 avl.Histogram(ch4product, varname, bins=50)
 ```
 
+The scatter and histogram plots can be downloaded as .png images from the camera button on the upper right corner (when cursor is on top of the image). 
+
+
 ## 6. References <a name="harp_references"></a>
 
-- [HARP S5P\_L2\_CH4](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_CH4.html)
+- [HARP S5P_L2_CH4](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_CH4.html)
 - [HARP operations documentation](http://stcorp.github.io/harp/doc/html/operations.html)
 - [Github demos of AVL plotting](https://github.com/stcorp/avl-demo-lps2022)
 - [CH4 Product Readme File](https://sentinels.copernicus.eu/documents/247904/3541451/Sentinel-5P-Methane-Product-Readme-File).
 - [CH4 Algorithm Thoretical Basis Document](https://sentinels.copernicus.eu/documents/247904/2476257/Sentinel-5P-TROPOMI-ATBD-Methane-retrieval.pdf)
 - [CH4 Product User Manual](https://sentinels.copernicus.eu/documents/247904/2474726/Sentinel-5P-Level-2-Product-User-Manual-Methane.pdf)
+
