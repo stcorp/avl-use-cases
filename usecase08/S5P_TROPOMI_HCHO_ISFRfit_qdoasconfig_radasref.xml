@@ -167,7 +167,7 @@
     </export>
     <analysis_window name="w200_bro_rad" disable="false" kurucz="ref" refsel="file" min="328.500" max="359.000" resol_fwhm="0.500" lambda0="343.750" >
       <display spectrum="true" poly="true" fits="true" residual="true" predef="true" ratio="true" />
-      <files refone="./data/S5P_OFFL_L1B_IR_UVN_20230608T005615_20230608T023745_29278_03_020100_20230608T042535.nc"
+      <files refone="./S5P_OFFL_L1B_IR_UVN_20230608T005615_20230608T023745_29278_03_020100_20230608T042535.nc"
              reftwo="./data/rar_20230608.nc"
              residual=""
 szacenter="45.000" szadelta="45.000" scanmode="after" minlon="150.000" maxlon="250.000" minlat="-5.000" maxlat="5.000" refns="50" cloudfmin="0.000" cloudfmax="1.000" 
