@@ -6,7 +6,7 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.15.2
+      jupytext_version: 1.16.2
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
@@ -33,7 +33,7 @@ In the steps below this tutorial shows
 ## Initial preparations
 
 To follow this notebook some preparations are needed. The TROPOMI SO2 data used in this notebook is obtained
-from the [Sentinel-5P Pre-Operations Data Hub](https://s5phub.copernicus.eu/dhus/#/home).
+from the [Copernicus Data Space Ecosystem](https://dataspace.copernicus.eu/explore-data/data-collections/sentinel-data/sentinel-5p).
 
 This example uses the following TROPOMI SO2 file obtained at 12.4.2021:
 
@@ -165,7 +165,7 @@ This very unique feature of HARP allows you to apply different kind of operation
 Now, we will import the same data file as in Step 1, but now **adding four different operations as a part of the import command**:
 
 - we only ingest data that is between -20S and 40N degrees latitude
-- we only consider pixels for which the data quality is high enough. The basic quality flag in any TROPOMI Level 2 netcdf file is given as `qa_value`. In the the [Product Readme File for SO2](https://sentinels.copernicus.eu/documents/247904/3541451/Sentinel-5P-Sulphur-Dioxide-Readme.pdf) you can find, that the basic recommendation for SO2 data is to use only those pixels where `qa_value > 0.5`. When HARP imports data, the quality values are interpreted as numbers between 0 and 100 (not 0 and 1), hence our limit in this case is 50. In HARP the `qa_value` is renamed as `SO2_column_number_density_validity`. The list of variables in HARP product after ingestion of S5P TROPOMI SO2 product are found [here](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_SO2.html).
+- we only consider pixels for which the data quality is high enough. The basic quality flag in any TROPOMI Level 2 netcdf file is given as `qa_value`. In the the [Product Readme File for SO2](https://sentiwiki.copernicus.eu/__attachments/1673595/S5P-MPC-BIRA-PRF-SO2%20-%20Sentinel-5P-Sulphur%20Dioxide%20Readme%202023%20-%202.8.pdf) you can find, that the basic recommendation for SO2 data is to use only those pixels where `qa_value > 0.5`. When HARP imports data, the quality values are interpreted as numbers between 0 and 100 (not 0 and 1), hence our limit in this case is 50. In HARP the `qa_value` is renamed as `SO2_column_number_density_validity`. The list of variables in HARP product after ingestion of S5P TROPOMI SO2 product are found [here](http://stcorp.github.io/harp/doc/html/ingestions/S5P_L2_SO2.html).
 
 - we limit the variables that we read to those that we need
 - we convert the unit of the tropospheric SO2 column number density to Dobson Units (DU)  (instead of using mol/m2 in which the original data was stored)
