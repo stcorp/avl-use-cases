@@ -13,7 +13,7 @@ jupyter:
     name: python3
 ---
 
-![S2_LA_Port_TrueRGB.jpg](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase4/S2_LA_Port_TrueRGB.jpg)
+![S2_LA_Port_TrueRGB.jpg](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase04/S2_LA_Port_TrueRGB.jpg)
 
 
 # Temporally averaged Level 3 data from TROPOMI L2 NO2 observations

@@ -13,7 +13,7 @@ jupyter:
     name: python3
 ---
 
-![header_case6.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase6/header_case6.png)
+![header_case6.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase06/header_case6.png)
 
 ## Demonstrating new plotting functions in Atmospheric Virtual Lab
 

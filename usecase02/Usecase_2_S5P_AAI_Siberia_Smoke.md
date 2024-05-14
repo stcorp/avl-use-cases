@@ -13,7 +13,7 @@ jupyter:
     name: python3
 ---
 
-![VIIRS_RGB_smoke.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase2/VIIRS_RGB_smoke.png)
+![VIIRS_RGB_smoke.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase02/VIIRS_RGB_smoke.png)
 
 # Creating gridded Level 3 data with HARP from multiple TROPOMI Level 2 UVAI files
 

@@ -13,7 +13,7 @@ jupyter:
     name: python3
 ---
 
-![madrid_banner.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase3/madrid_banner.png)
+![madrid_banner.png](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase03/madrid_banner.png)
 
 # Comparison of OMI and TROPOMI spatial resolution of NO2 observations at  city scale
 
