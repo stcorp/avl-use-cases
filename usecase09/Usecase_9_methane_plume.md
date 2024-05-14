@@ -1,18 +1,19 @@
 ---
 jupyter:
   jupytext:
+    formats: md,ipynb
     text_representation:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.16.1
+      jupytext_version: 1.16.2
   kernelspec:
     display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
 
-![header_CH4_plume](header_CH4_plume.png)
+![header_CH4_plume](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase09/header_CH4_plume.png)
 
 ## Methane plumes observed by TROPOMI 
 
@@ -45,16 +46,10 @@ The TROPOMI methane product data file provides the **column average dry air mixi
 
 `S5P_RPRO_L2__CH4____20210612T125610_20210612T143739_18985_03_020400_20221124T220051.nc`
 
-The TROPOMI level 2 data used in this notebook can be downloaded using the eofetch package. To be able to perform `eofetch.download`, you must have environment variables, CDSE_S3_ACCESS and CDSE_S3_SECRET, set as described in in [eofetch README](https://github.com/stcorp/eofetch#readme).  Instructions how to get the access to EO data via S3 can be found [here](https://documentation.dataspace.copernicus.eu/APIs/S3.html). (Replace xxx and yyy with your own credentials).
+The TROPOMI level 2 data used in this notebook can be downloaded using the eofetch package. To be able to perform `eofetch.download`, you must have environment variables, CDSE_S3_ACCESS and CDSE_S3_SECRET, set as described in in [eofetch README](https://github.com/stcorp/eofetch#readme).
 
 ```python
-import os
-os.environ["CDSE_S3_ACCESS"]="xxx"
-os.environ["CDSE_S3_SECRET"]="yyy"
-```
-
-```python
-filename="S5P_RPRO_L2__CH4____20210612T125610_20210612T143739_18985_03_020400_20221124T220051.nc"
+filename="S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc"
 eofetch.download(filename)
 ```
 
@@ -67,7 +62,6 @@ When when importing the methane data the following operations are done:
 **2)** `latitude>34;latitude<43,longitude>5;latitude<67`: to cut the data over Turkmenistan.
 
 ```python
-filename_tropomi = "S5P_OFFL_L2__CH4____20230312T082359_20230312T100529_28034_03_020500_20230315T154121.nc"
 operations_avl = ";".join([
     "CH4_column_volume_mixing_ratio_dry_air_validity>50", 
     "latitude>34;latitude<43","longitude>5;latitude<67"])
@@ -76,7 +70,7 @@ operations_avl = ";".join([
 The parameter to be viewed is the **bias corrected XCH4**, i.e., the column volume mixing ratio that is corrected for the dependence on surface albedo. To change the default XCH4 to the bias correceted XCH4, ingestion option `"ch4=bias_corrected"` needs to be applied when importing the data: 
 
 ```python
-ch4product=harp.import_product(filename_tropomi, operations_avl, options="ch4=bias_corrected")
+ch4product=harp.import_product(filename, operations_avl, options="ch4=bias_corrected")
 ```
 
 To plot the methane observations on the map,  the `avl.Geo` is used as in [Use case 6](https://atmospherictoolbox.org/media/usecases/Usecase_6_CO_European_wildfires_2022.html#paragraph3). The variable name to be plotted is `"CH4_column_volume_mixing_ratio_dry_air"` :
