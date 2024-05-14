@@ -13,7 +13,7 @@ jupyter:
     name: python3
 ---
 
-![banner_smoke](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase10/banner_smoke.png)
+![banner_smoke](https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase09/banner_smoke.png)
 ## Long-range transport of aerosols over the Atlantic
  
 During summer 2023 there were several major aerosol long-range transport episodes over the Northern Atlantic. Intense fires in Canada emitted loads of smoke that lead to several significant transport episodes, when smoke from Canadian fires were transported to Europe. Also several major dust outflow episodes from Sahara took place. This notebook demonstrates how these episodes can be analysed and identified using observations from TROPOMI.   
