@@ -136,15 +136,6 @@ plot.add(avl.Geo(co2, 'CO_column_volume_mixing_ratio',colormap='RdYlBu_r', color
 
 Now, when comparing the aerosol plumes and CO we can see that the northern plume is clearly associated also with elevated CO values, that indicate smoke. For the southern aerosol plume there is no significant CO plume visible, which indicates that it is mostly dust. The UVAI and CO variables can be also visualised as 2d scatterplots as a function of time. From the plots below we see that UVAI present elevated (>2) values around 15:15 -15:20, and 15:22-15:28, whereas the CO peaks only at 15:22-15:28. 
 
-```python
-from avl import vis
-
-avl.Scatter(uvai1, 'absorbing_aerosol_index')
-```
-
-```python
-avl.Scatter(co1, 'CO_column_volume_mixing_ratio')
-```
 
 ### 4. References <a name="paragraph1"></a>
 

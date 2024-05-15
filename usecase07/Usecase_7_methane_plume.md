@@ -25,8 +25,7 @@ This example case focuses on detecting methane (CH4) plumes from oil/gas product
 1. [Python packages for the notebook](#paragraph1)
 2. [TROPOMI Level 2 methane data](#paragraph2)
 3. [Plotting XCH4 data on a map using AVL](#paragraph4)
-4. [AVL scatter and histogram plots](#paragraph5)
-5. [References](#harp_references)
+4. [References](#harp_references)
 
 
 
@@ -82,23 +81,6 @@ avl.Geo(ch4product, varname, colormap='magma_r', colorrange=(1910, 1940), opacit
 ```
 
 On 12th March 2023 a methane plume east from Asgabat is visible in TROPOMI observations, as the emissions stand out clearly from the background. 
-
-
-## 4. AVL scatter and histogram plots <a name="paragraph5"></a>
-
-AVL offers also functions for scatter and histogram plots. A scatter plot of the methane data imported above can be done with the following command, representing the XCH4 values along the observation time:
-
-```python
-avl.Scatter(ch4product, varname)
-```
-
-The imported methane data over Turkmenistan can be also represented as an histogram with the following command:
-
-```python
-avl.Histogram(ch4product, varname, bins=50)
-```
-
-The scatter and histogram plots can be downloaded as .png images from the camera button on the upper right corner (when cursor is on top of the image). 
 
 
 ## 6. References <a name="harp_references"></a>
