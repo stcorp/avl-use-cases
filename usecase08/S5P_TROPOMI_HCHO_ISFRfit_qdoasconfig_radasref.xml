@@ -39,9 +39,9 @@
       <reference angle="90.000" tol="10.000" />
       <record min="0" max="0" />
       <cloud min="0.000" max="1.000" />
-      <geolocation selected="none">
+      <geolocation selected="rectangle">
         <circle radius="0.000" long="0.000" lat="0.000" />
-        <rectangle west="0.000" east="0.000" south="0.000" north="0.000" />
+        <rectangle west="0.000" east="0.000" south="45.000" north="65.000" />
         <sites radius="0.000" />
       </geolocation>
     </selection>
@@ -68,7 +68,7 @@
       <binomial width="1" iterations="1" cal="false" fit="false" div="false" />
     </highpass_filter>
     <calibration ref="./data/sao2010_solref_vac.dat" method="ODF">
-      <line shape="file" lorentzorder="1" slfFile="./data/band_3_row_225.txt" />
+      <line shape="file" lorentzorder="1" slfFile="./data/isrf_band_3_row_225.txt" />
       <display spectra="true" fits="true" residual="true" shiftsfp="true" />
       <polynomial shift="2" sfp="2" />
       <window min="325.0" max="365.0" intervals="5" custom_windows="325.00-332.00,332.00-339.00,339.00-360.00,360.00-360.00,360.00-365.00," division="contiguous" size="10.00" />
@@ -94,20 +94,11 @@
     <undersampling ref="./data/sao2010_solref_vac.dat" method="fixed" shift="0.010000" />
     <instrumental format="tropomi" site="No Site Specified" saa_convention="0-south" >
       <ascii size="0" format="line" zen="false" azi="false" ele="false" date="false" time="false" lambda="false" straylight="false" lambda_min="0" lambda_max="0" calib="" transmission="" />
-      <logger type="all" azi="false" calib="" instr="" />
-      <acton type="old" calib="" instr="" />
-      <pdaegg type="all" azi="false" calib="" instr="" />
-      <pdaeggold type="all" azi="false" calib="" instr="" />
-      <pdaeggold type="all" azi="false" calib="" instr="" />
-      <ccdohp96 calib="" instr="" ipv="" dnl="" />
-      <ccdha94 calib="" instr="" ipv="" dnl="" />
       <saozvis type="zenithal" calib="" instr="" />
       <saozefm straylight="false" lambda_min="0" lambda_max="0"      calib="" instr="" />
       <mfc size="0" first="0" revert="false" auto="false" omask="0" imask="0" dmask="0" smask="0" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" dark="" offset="" />
       <mfcbira size="0" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
       <mfcstd size="0" revert="false" straylight="false" date="" lambda_min="0" lambda_max="0" calib="" instr="" dark="" offset="" />
-      <rasas straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
-      <pdasieasoe straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
       <ccdeev size="0" straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" image="" stray="" dnl=""  type="all" />
       <gdpnetcdf type="1a" pixel="all" calib="" instr="" />
       <gdpbin type="1a" pixel="all" calib="" instr="" />
@@ -116,7 +107,7 @@
       <noaa straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
       <omi type="uv2" min="0.0" max="0.0" ave="false" trackSelection="" pixelQF_rejectionFlag="false" pixelQF_maxGaps="5" pixelQF_mask="63" xTrackMode="IGNORE" calib="" instr="" />
       <tropomi band="BAND3" reference_orbit_dir="" trackSelection="" calib="" instr="" />
-      <gems trackSelection="" calib="" instr="" />
+      <gems trackSelection="" binning="1" calib="" instr="" />
       <apex trackSelection="" calib="" instr="" />
       <gome2 type="1a" calib="" instr="" />
       <mkzy straylight="false" lambda_min="0" lambda_max="0" calib="" instr="" />
@@ -165,13 +156,13 @@
     </output>
     <export path="" titles="true" dir="true" >
     </export>
-    <analysis_window name="w200_bro_rad" disable="false" kurucz="ref" refsel="file" min="328.500" max="359.000" resol_fwhm="0.500" lambda0="343.750" >
+    <analysis_window name="hcho_analysis" disable="false" kurucz="ref" refsel="file" min="328.500" max="359.000" resol_fwhm="0.500" lambda0="343.750" >
       <display spectrum="true" poly="true" fits="true" residual="true" predef="true" ratio="true" />
       <files refone="./S5P_OFFL_L1B_IR_UVN_20230608T005615_20230608T023745_29278_03_020100_20230608T042535.nc"
              reftwo="./data/rar_20230608.nc"
-             residual=""
-szacenter="45.000" szadelta="45.000" scanmode="after" minlon="150.000" maxlon="250.000" minlat="-5.000" maxlat="5.000" refns="50" cloudfmin="0.000" cloudfmax="1.000" 
-              maxdoasrefmode="sza" 
+             residual="" saveresiduals="false"
+             szacenter="45.000" szadelta="45.000" scanmode="after" minlon="150.000" maxlon="250.000" minlat="-5.000" maxlat="5.000" refns="50" cloudfmin="0.000" cloudfmax="1.000"
+             maxdoasrefmode="sza"
              east="true" center="true" west="true" backscan="true" />
       <cross_sections>
         <cross_section sym="o3223" ortho="Differential XS" subtract="" subtract_flag="false" cstype="io" amftype="none" corrtype="none" molecular_xs="" fit="true" filter="true" cstrncc="false" ccfit="true" icc="0.000" dcc="0.001" ccio="5.000e+19" ccmin="0.000e+00" ccmax="0.000e+00" csfile="./data/O3223_Serdyuchenko(2014)_223K_213-1100nm(2013 version).xs" amffile="" />

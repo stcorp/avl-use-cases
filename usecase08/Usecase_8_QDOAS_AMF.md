@@ -18,7 +18,7 @@ jupyter:
 
 This use case demonstrates the use of `QDOAS` and `BeAMF` functionalities that are included in the newest version of Atmospheric Virtual Laboratory. `QDOAS` performs **DOAS retrievals** of trace gases from spectral measurements whereas `BeAMF`is a tool to calculate the **Air Mass Factor (AMF)**  to make the conversion from trace gas slant column density (SCD) to vertical column density (VCD). 
 
-In this example  **formaldehyde (HCHO)** vertical column density from TROPOMI (S5P) L1B data is retrieved using QDOAS and BeAMF. The interest is to observe enhanced levels of HCHO in Canada in June 2023, when large parts of the country were affected by series of wildfires. 
+In this example  **formaldehyde (HCHO)** vertical column density from TROPOMI (S5P) L1B data is retrieved using QDOAS and BeAMF. The interest is to observe enhanced levels of HCHO in Canada in June 2023, when large parts of the country were affected by a series of wildfires.
 
 
 ### Table of contents
@@ -33,12 +33,12 @@ In this example  **formaldehyde (HCHO)** vertical column density from TROPOMI (S
 8. [References](#references)
 
 
-<!-- #region -->
+
 ### 1. Initial preparations <a name="paragraph1"></a>
 
 **A. Input files**
 
-In this tutorial the input data is based on the TROPOMI L1B radiance spectra measured on 8 June 2023 (orbit 29289). In addition, corresponding operational S5P HCHO L2 file is needed to obtain auxiliary input parameters for BeAMF calculations. 
+In this tutorial the input data is based on the TROPOMI L1B radiance spectra measured on 8 June 2023 (orbit 29289). In addition, the corresponding operational S5P HCHO L2 file is needed to obtain auxiliary input parameters for BeAMF calculations.
 
 This notebook and BeAMF requires the following files:
 - **TROPOMI L1B data:** S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc, S5P_OFFL_L1B_IR_UVN_20230608T005615_20230608T023745_29278_03_020100_20230608T042535.nc
@@ -49,6 +49,9 @@ This notebook and BeAMF requires the following files:
 
 - **Operational TROPOMI L2 HCHO file:** S5P_OFFL_L2__HCHO___20230608T193244_20230608T211414_29289_03_020401_20230610T184103.nc
 
+The QDOAS configuration file uses the so-called radiance-as-reference setting: because formaldehyde is a weak absorber, relatively large offsets in the retrieved slant columns are generally observed. These can be mitigated by an active offset correction of my normalizing the spectral data by an average background radiance field, included here in the file `data/rar_20230608.nc`. Retrieving formaldehyde from measurements from a few days earlier or later can safely use the same background radiance file, but for other dates a new file would be required. Details are described in the S5P formaldehyde algorithm documentation.
+
+To optimize the retrieval quality, another advanced configuration option used here is the fitting of the slit function (ISRF) during QDOAS's internal calibration step. An initial estimate of the ISRF is provided in the file `data/isrf_band_3_row_225.txt`.
 
 **B. Python packages**
 
@@ -60,13 +63,13 @@ The following Python packages are needed for running this notebook:
 - `eofetch` (for downloading of operational TROPOMI HCHO L2 file) 
 
 For more info on eofetch see e.g. [eofetch README](https://github.com/stcorp/eofetch#readme) or [eofetch example](https://atmospherictoolbox.org/media/usecases/Usecase_2_S5P_AAI_Siberia_Smoke.html).
-<!-- #endregion -->
 
 ```python
 import harp
 import avl
 import eofetch
 import os
+import urllib
 ```
 
 ### 2. Downloading TROPOMI files using eofetch <a name="paragraph2"></a>
@@ -86,19 +89,44 @@ eofetch.download("S5P_OFFL_L2__HCHO___20230608T193244_20230608T211414_29289_03_0
 
 To perform the DOAS fit using the `doas_cl` command, the QDOAS configuration file, TROPOMI L1B input file, and the DOAS-fit output filename need to be defined. The full command is as follows:
 
-`!doas_cl -a "HCHO" -c S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml -f S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc -o S5P_L2_QDOASSCD_radasref.nc -xml "/project/selection/record/min=100" -xml "/project/selection/record/max=2500" `
+`!doas_cl -a "HCHO" -c S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml -f S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc -o S5P_L2_QDOASSCD_radasref.nc`
 
 - `-a "HCHO"` flag specifies which project is used for the QDOAS.  
 -  **QDOAS configuration file**: for this use case we use pre-defined configuration file `S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml` for HCHO DOAS fit that is located in this example at the same folder as our notebook. At command line `-c` refers to the definition of configuration file. The configuration file uses data from the `data` folder, that needs to be downloaded also. 
 - **TROPOMI L1B input file**: `S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc`, the input is referred with `-f` at the command line.
 - **QDOAS output file**: The QDOAS output file in this use case is named as `S5P_L2_QDOASSCD_radasref.nc`, and referred with `-o` at the command line.
-- To reduce the computing time, `-xml "/project name/selection/record/min=100"` and `-xml "/project name/selection/record/max=2500"` are used to set the min and max scanlines in the configuration file, to process only a part of the full orbit. 
+- To reduce the computing time, the xml file specified with the `-c` option includes specifications to limit the processing to pixels between the `[45, 65]` degree elatitude interval. To undo this, find the `<geolocation selected="rectangle">` in the xml file and change `rectangle` to `none`.
 
-Note that you need to add exclamation mark `!` at the beginning, before the actual command. The processing of the file can take some time. 
-
+We first download the necessary data files (in case they are not available locally yet):
 
 ```python
-#!doas_cl -a "HCHO" -c S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml -f S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc -o S5P_L2_QDOASSCD_radasref.nc -xml "/project/selection/record/min=100" -xml "/project/selection/record/max=2500"
+datafiles = [
+    'S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml',
+    'harp_hcho.json',
+    'data/O3223_Serdyuchenko(2014)_223K_213-1100nm(2013 version).xs',
+    'data/O3243_Serdyuchenko(2014)_243K_213-1100nm(2013 version).xs',
+    'data/bro_Fleischmann(2004)_223K_300-385nm.xs',
+    'data/ch2o_MellerMoortgat(2000)_298K_224.56-376.00nm(0.01nm).xs',
+    'data/isrf_band_3_row_225.txt',
+    'data/no2_VANDAELE_1998_220K.xs',
+    'data/o3lambda_serdyunchenko_223.xs',
+    'data/o3squared_serdyunchenko_223.xs',
+    'data/o4_thalman_volkamer_293K.xs',
+    'data/rar_20230608.nc',
+    'data/ring_sao2010_hr_norm.xs',
+    'data/sao2010_solref_vac.dat',
+]
+data_url = 'https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase08/'
+for file in datafiles:
+    if not os.path.isfile(file):
+        urllib.request.urlretrieve(data_url + file, file)
+```
+
+Then we call qdoas to perform the retrieval.
+
+Note that you need to add an exclamation mark `!` at the beginning, before the actual command. The processing of the file can take some time.
+
+```python
 !doas_cl -a "HCHO" -c S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml -f S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc -o S5P_L2_QDOASSCD_radasref.nc
 ```
 
@@ -106,17 +134,17 @@ Note that you need to add exclamation mark `!` at the beginning, before the actu
 
 To prepare input for BeAMF, the QDOAS outputfile `S5P_L2_QDOASSCD_radasref.nc` needs to be converted into HARP compliant format. For this the `qdoas2harp` command is used. The command `qd2hp` performs conversion and it is used as follows:
 
-`!qd2hp -outdir /path/to/outdir/ -fitwin w200_bro_rad -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc`
+`!qd2hp -outdir /path/to/outdir/ -fitwin hcho_analysis -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc`
 
 where
 - `-outdir`is the path for the QDOAS output file.
-- `-fitwin`is the **fitting window** appropriate for HCHO. Here **w200_bro_rad** is used that is given in our QDOAS output file. 
+- `-fitwin`is the **fitting window** appropriate for HCHO. Here **hcho_analysis** is used that is given in our QDOAS output file.
 - `-slcol` refers to **slant column** and "ch2o=HCHO" specify which symbol indicates formaldehyde.
 
 Note that in this example all the input and output files are kept in the same folder with this notebook. That is why  `-outdir .` is used in the command below, that refers to the current directory. Now, to run  `qd2hp` in the notebook, you need to add exclamation mark `!` at the beginning, before the actual command: 
 
 ```python
-!qd2hp -outdir . -fitwin w200_bro_rad -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc
+!qd2hp -outdir . -fitwin hcho_analysis -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc
 ```
 
 After executing the command succesfully, output file with selected information from the original file in HARP-compliant format is created, that will be the input for BeAMF:
@@ -183,7 +211,7 @@ hcho_product = harp.import_product(filename, operations)
 ```
 
 ```python
-avl.Geo(hcho_product,value="HCHO_column_number_density", colormap="viridis", colorrange=(0.5e16,2e16), centerlat=55, centerlon=-110, zoom=4)
+avl.Geo(hcho_product,value="HCHO_column_number_density", colormap="viridis", colorrange=(0.5e15,2e16), centerlat=55, centerlon=-110, zoom=4)
 ```
 
 ```python
