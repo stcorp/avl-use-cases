@@ -119,7 +119,7 @@ datafiles = [
 data_url = 'https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase08/'
 for file in datafiles:
     if not os.path.isfile(file):
-        urllib.request.urlretrieve(data_url + file, file)
+        urllib.request.urlretrieve(data_url + urllib.parse.quote(file), file)
 ```
 
 Then we call qdoas to perform the retrieval.
