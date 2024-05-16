@@ -116,12 +116,17 @@ datafiles = [
     'data/ring_sao2010_hr_norm.xs',
     'data/sao2010_solref_vac.dat',
 ]
-if not os.path.isdir('data'):
+if not os.path.exists('data'):
     os.mkdir('data')
 data_url = 'https://raw.githubusercontent.com/stcorp/avl-use-cases/master/usecase08/'
 for file in datafiles:
-    if not os.path.isfile(file):
+    if not os.path.exists(file):
         urllib.request.urlretrieve(data_url + urllib.parse.quote(file), file)
+```
+
+```python
+if os.path.exists('S5P_L2_QDOASSCD_radasref.nc'):
+    os.remove('S5P_L2_QDOASSCD_radasref.nc')
 ```
 
 Then we call qdoas to perform the retrieval.
