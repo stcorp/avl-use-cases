@@ -131,27 +131,27 @@ if os.path.exists('S5P_L2_QDOASSCD_radasref.nc'):
 
 Then we call qdoas to perform the retrieval.
 
-Note that you need to add an exclamation mark `!` at the beginning, before the actual command. The processing of the file can take some time.
+Note the `%%sh` at the beginning, which means that the command will be executed as a shell command. The processing of the file can take some time.
 
-```python
-!doas_cl -a "HCHO" -c S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml -f S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc -o S5P_L2_QDOASSCD_radasref.nc
+```sh
+doas_cl -a "HCHO" -c S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml -f S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc -o S5P_L2_QDOASSCD_radasref.nc
 ```
 
 ### 4. Converting QDOAS output to HARP compliant format<a name="paragraph4"></a>
 
 To prepare input for BeAMF, the QDOAS outputfile `S5P_L2_QDOASSCD_radasref.nc` needs to be converted into HARP compliant format. For this the `qdoas2harp` command is used. The command `qd2hp` performs conversion and it is used as follows:
 
-`!qd2hp -outdir /path/to/outdir/ -fitwin hcho_analysis -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc`
+`qd2hp -outdir /path/to/outdir/ -fitwin hcho_analysis -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc`
 
 where
 - `-outdir`is the path for the QDOAS output file.
 - `-fitwin`is the **fitting window** appropriate for HCHO. Here **hcho_analysis** is used that is given in our QDOAS output file.
 - `-slcol` refers to **slant column** and "ch2o=HCHO" specify which symbol indicates formaldehyde.
 
-Note that in this example all the input and output files are kept in the same folder with this notebook. That is why  `-outdir .` is used in the command below, that refers to the current directory. Now, to run  `qd2hp` in the notebook, you need to add exclamation mark `!` at the beginning, before the actual command: 
+Note that in this example all the input and output files are kept in the same folder with this notebook. That is why  `-outdir .` is used in the command below, that refers to the current directory. Now, to run `qd2hp` in the notebook, you need to add the `%%sh` at the beginning, before the actual shell command:
 
-```python
-!qd2hp -outdir . -fitwin hcho_analysis -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc
+```sh
+qd2hp -outdir . -fitwin hcho_analysis -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc
 ```
 
 After executing the command succesfully, output file with selected information from the original file in HARP-compliant format is created, that will be the input for BeAMF:
@@ -166,14 +166,14 @@ In AMF calculation we need information e.g. on cloud and surface properties, and
 
 You can check which operational S5P L2 HCHO file is needed by using **aux_imp** command together with the name of the HARP compliant QDOAS file:
 
-```python
-!aux_imp S5P_OFFL_QDOAS_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc 
+```sh
+aux_imp S5P_OFFL_QDOAS_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc
 ```
 
 Now that the L2 file is downloaded already at [Sect. 2](#paragraph2), the auxiliary parameters can be extracted. After the command is executed succesfully, the auxiliary variables will be written into the HARP compliant QDOAS file ([Sect. 3](#paragraph3)). Note that the extraction of the variables **can take a while**. As all the files are in the same working folder as the notebook, the extraction can be run as follows (--auxdir . pointing to the working folder):
 
-```python
-!aux_imp S5P_OFFL_QDOAS_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc --auxdir .
+```sh
+aux_imp S5P_OFFL_QDOAS_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc --auxdir .
 ```
 
 The resulting S5P_OFFL_QDOAS file can be read with harp to print out the contents. This data will be part of the input needed to run BeAMF.
@@ -196,8 +196,8 @@ avl.download("LUT_AMF_I_300nm_500nm_S1_US_small_new.nc")
 
 The BeAMF tool and AMF calculation is executed as follows (note that this can take several minutes):
 
-```python
-!beamf -c harp_hcho.json 
+```sh
+beamf -c harp_hcho.json
 ```
 
 The new parameters from BeAMF are again written into the S5P_OFFL_QDOAS - file. By printing out the file we can these new parameters that has been added, including e.g. HCHO_column_number_density:
