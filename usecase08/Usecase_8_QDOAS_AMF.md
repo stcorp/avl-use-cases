@@ -221,18 +221,6 @@ hcho_product = harp.import_product(filename, operations)
 avl.Geo(hcho_product,value="HCHO_column_number_density", colormap="viridis", colorrange=(0.5e15,2e16), centerlat=55, centerlon=-110, zoom=4)
 ```
 
-```python
-varname1 = 'HCHO_slant_column_number_density'
-varname2 = 'HCHO_column_number_density'
-```
-
-```python
-plot = avl.vis.Plot()
-plot.add(avl.Line(hcho_product, varname2, name="HCHO vertical column density"))
-plot.add(avl.Line(hcho_product, varname1, name="HCHO slant column density"))
-plot
-```
-
 ### 8. References <a name="references"></a>
 
 - [BeAMF documentation](https://uvvis-bira-iasb.github.io/BeAMF/)
