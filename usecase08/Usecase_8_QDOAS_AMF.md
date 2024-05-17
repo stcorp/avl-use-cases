@@ -49,7 +49,7 @@ This notebook and BeAMF requires the following files:
 
 - **Operational TROPOMI L2 HCHO file:** S5P_OFFL_L2__HCHO___20230608T193244_20230608T211414_29289_03_020401_20230610T184103.nc
 
-The QDOAS configuration file uses the so-called radiance-as-reference setting: because formaldehyde is a weak absorber, relatively large offsets in the retrieved slant columns are generally observed. These can be mitigated by an active offset correction of my normalizing the spectral data by an average background radiance field, included here in the file `data/rar_20230608.nc`. Retrieving formaldehyde from measurements from a few days earlier or later can safely use the same background radiance file, but for other dates a new file would be required. Details are described in the S5P formaldehyde algorithm documentation.
+The QDOAS configuration file uses the so-called radiance-as-reference setting: because formaldehyde is a weak absorber, relatively large offsets in the retrieved slant columns are generally observed. These can be mitigated by an active offset correction or by normalizing the spectral data by an average background radiance field, included here in the file `data/rar_20230608.nc`. Retrieving formaldehyde from measurements from a few days earlier or later can safely use the same background radiance file, but for other dates a new file would be required. Details are described in the S5P formaldehyde algorithm documentation.
 
 To optimize the retrieval quality, another advanced configuration option used here is the fitting of the slit function (ISRF) during QDOAS's internal calibration step. An initial estimate of the ISRF is provided in the file `data/isrf_band_3_row_225.txt`.
 
@@ -95,7 +95,7 @@ To perform the DOAS fit using the `doas_cl` command, the QDOAS configuration fil
 -  **QDOAS configuration file**: for this use case we use pre-defined configuration file `S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml` for HCHO DOAS fit that is located in this example at the same folder as our notebook. At command line `-c` refers to the definition of configuration file. The configuration file uses data from the `data` folder, that needs to be downloaded also. 
 - **TROPOMI L1B input file**: `S5P_OFFL_L1B_RA_BD3_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc`, the input is referred with `-f` at the command line.
 - **QDOAS output file**: The QDOAS output file in this use case is named as `S5P_L2_QDOASSCD_radasref.nc`, and referred with `-o` at the command line.
-- To reduce the computing time, the xml file specified with the `-c` option includes specifications to limit the processing to pixels between the `[45, 65]` degree elatitude interval. To undo this, find the `<geolocation selected="rectangle">` in the xml file and change `rectangle` to `none`.
+- To reduce the computing time, the xml file specified with the `-c` option includes specifications to limit the processing to pixels between the `[45, 65]` degree latitude interval. To undo this, find the `<geolocation selected="rectangle">` in the xml file and change `rectangle` to `none`.
 
 We first download the necessary data files (in case they are not available locally yet):
 
@@ -139,7 +139,7 @@ doas_cl -a "HCHO" -c S5P_TROPOMI_HCHO_ISFRfit_qdoasconfig_radasref.xml -f S5P_OF
 
 ### 4. Converting QDOAS output to HARP compliant format<a name="paragraph4"></a>
 
-To prepare input for BeAMF, the QDOAS outputfile `S5P_L2_QDOASSCD_radasref.nc` needs to be converted into HARP compliant format. For this the `qdoas2harp` command is used. The command `qd2hp` performs conversion and it is used as follows:
+To prepare input for BeAMF, the QDOAS outputfile `S5P_L2_QDOASSCD_radasref.nc` needs to be converted into a HARP compliant format. For this the `qdoas2harp` command is used. The command `qd2hp` performs conversion and it is used as follows:
 
 `qd2hp -outdir /path/to/outdir/ -fitwin hcho_analysis -slcol "ch2o=HCHO" S5P_L2_QDOASSCD_radasref.nc`
 
@@ -200,7 +200,7 @@ The BeAMF tool and AMF calculation is executed as follows (note that this can ta
 beamf -c harp_hcho.json
 ```
 
-The new parameters from BeAMF are again written into the S5P_OFFL_QDOAS - file. By printing out the file we can these new parameters that has been added, including e.g. HCHO_column_number_density:
+The new parameters from BeAMF are again written into the S5P_OFFL_QDOAS - file. By printing out the file we can see the new parameters that have been added, including e.g. HCHO_column_number_density:
 
 ```python
 hcho=harp.import_product('S5P_OFFL_QDOAS_20230608T193244_20230608T211414_29289_03_020100_20230608T230242.nc')
